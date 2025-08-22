@@ -1,0 +1,61 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Python 相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django 相关
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/  # 用户上传文件
+staticfiles/  # 收集的静态文件
+# 仅忽略 media 目录下的图片
+/media/*.png
+/media/*.jpg
+/media/*.jpeg
+/media/*.gif
+
+# 前端相关
+/node_modules/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 测试相关
+.coverage
+htmlcov/
+.pytest_cache/
+
+# IDE 配置
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store  # Mac 系统文件
+Thumbs.db  # Windows 系统文件
+
+Scripts/
+share/

@@ -1,0 +1,55 @@
+{% extends 'zhuye/index.html' %}
+{% load static %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'zhuye/uprofile.css' %}" />
+{% endblock %}
+{% block title %}
+  档案页面
+{% endblock %}
+{% block content %}
+  <h1 class="page-title">用户信息</h1>
+  <div class="login-card">
+    <form method="post" action="{% url 'uprofile' %}" id="loginForm" enctype="multipart/form-data">
+      {% csrf_token %}
+      <!-- 在表单顶部添加错误提示 -->
+      {% if form.non_field_errors %}
+        <div class="error-messages">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% for field in form %}
+        {{ field.errors }}
+        <div class="form-group">
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          <div>
+            {% if field.name == 'avatar' %}
+              {% if form.instance.avatar %}
+                <!-- 显示已上传的头像 -->
+                <img src="{{ form.instance.avatar.url }}" class="current-avatar" />
+              {% else %}
+                <!-- 显示默认头像 -->
+                <img src="{% static 'avatars/default_avatar.png' %}"class="default-avatar" />
+              {% endif %}
+              <!-- 头像上传控件（来自表单） -->
+              <div class="avatar-upload">
+                <input type="file" class="form-input" id="{{ field.id_for_label }}" name="{{ field.html_name }}" accept="image/jpeg, image/png" style="" />
+                <!-- 渲染上传控件 -->
+                <small class="form-hint">支持 JPG、PNG 格式，建议尺寸 200x200px</small>
+              </div>
+            {% else %}
+              {{ field }}
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn">保存</button>
+    </form>
+  </div>
+{% endblock %}
+{% block js %}
+{{ block.super }}
+<!-- 引用编译后的 JavaScript 文件 -->
+<script src="{% static 'js/zhuye/uprofile.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "zhuye/index.html" %} {% load static %} {% block title %}登录页面{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'zhuye/login.css' %}" />
+{% endblock %} {% block content %}
+<h1 class="page-title">用户登录</h1>
+<div class="login-card">
+  <form method="post" action="{% url 'login' %}" id="loginForm">
+    {% csrf_token %}
+    {% if form.errors %}
+    <div class="error-message">
+      用户名或密码不正确，请重新尝试
+    </div>
+    {% endif %}
+    {% for field in form %}
+    <div class="form-group">
+      <label class="form-label" for="{{ field.id_for_label }}">
+        {{ field.label }}
+      </label>
+      {% if field.name == 'password' %}
+      <div class="password-container">{{ field }}</div>
+      {% else %}
+        {{ field }}
+      {% endif %}
+      <div class="form-hint">{{ field.help_text }}</div>
+    </div>
+    {% endfor %}
+      <div class="form-checkbox">
+        <div class='rmbm'>
+        <span style=''>
+            <input type="checkbox" id="remember_me" name="remember_me" value='ffff'>
+        <label for="remember_me">记住我</label>
+        </span>
+        <a href="">忘记密码？</a>
+        </div>
+    <button type="submit" class="btn">登录</button>
+
+    <div class="register-link">
+      还没有账号？
+      <a href="{% url 'rgst' %}">立即注册</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

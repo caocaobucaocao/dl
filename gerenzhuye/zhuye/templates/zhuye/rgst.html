@@ -1,0 +1,33 @@
+{% extends "zhuye/index.html" %} {% load static %} {% block title %}注册页面
+{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'zhuye/rgst.css' %}" />
+{% endblock %} {% block content %}
+<h1 class="page-title">用户注册</h1>
+<div class="register-card" style=''>
+  <form method="post" action="{% url 'rgst' %}" id="registerForm">
+    {% csrf_token %}
+    {% for field in form %}
+
+    <div class="form-group">
+        {{ field.errors }}
+      <label class="form-label" for="{{ field.id_for_label }}">
+        {{ field.label }}
+    </label>
+      {% if field.name == 'password' %}
+      <div class="password-container">{{field}}</div>
+      {% else %}{{field}} {% endif %}
+      <div class="form-hint">{{ field.help_text }}</div>
+    </div>
+    {% endfor %}
+    <div class="form-checkbox">
+        <input type="checkbox" id="agree_terms" name="agree_terms" required>
+        <label for="agree_terms">我已阅读并同意<a href="#" style="color: #3498db;">服务条款</a>和<a href="#" style="color: #3498db;">隐私政策</a></label>
+    </div>
+    <button type="submit" class="btn">注册</button>
+    <div class="login-link">
+        已有账号？
+      <a href="{% url 'login' %}">立刻登录</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

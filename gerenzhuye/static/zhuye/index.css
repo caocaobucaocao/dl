@@ -1,0 +1,357 @@
+ /* 基础样式重置 */
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+
+ /*
+    使用CSS Grid布局，创建一个两行两列的布局
+    左侧为侧边栏，右侧为主内容区，底部为页脚
+    第一列宽度为250px，主内容区自适应剩余空间
+    第一行填充剩余内容，第二行高度由内容决定
+*/
+ body {
+     min-height: 100vh;
+     color: #333;
+     display: grid;
+     grid-template-areas:
+         "sidebar main"
+         "footer footer";
+     grid-template-columns: 250px 1fr;
+     grid-template-rows: 1fr auto;
+ }
+
+ /*
+    指定区域 sidebar
+    flex 布局
+    列方向
+*/
+ .sidebar {
+     grid-area: sidebar;
+     background-color: #2c3e50;
+     color: white;
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 2rem;
+ }
+
+ /*
+    logo 样式
+    使用 flex 布局，垂直方向居中对齐
+    间距 0.8rem
+    文字颜色 白色
+    字体大小 1.4rem
+    字体加粗
+    底部边框 rgba(255, 255, 255, 0.1) 透明度 0.1
+*/
+ .logo {
+     display: flex;
+     align-items: center;
+     gap: 0.8rem;
+     font-size: 1.4rem;
+     font-weight: bold;
+     padding-bottom: 1rem;
+     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+ }
+
+ /*
+    logo 图标样式
+    字体大小 1.8rem
+    */
+ .logo i {
+     font-size: 1.8rem;
+ }
+
+ /*
+    导航链接样式
+    使用 flex 布局，列方向
+    间距 0.5rem
+*/
+ .nav-links {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+ }
+
+ /*
+    导航项样式
+    间距 0.8rem 1rem
+    圆角 6px
+    过渡效果 0.3s
+    使用 flex 布局，水平居中对齐
+    间距 0.8rem 内部元素间距
+*/
+ .nav-item {
+     padding: 0.8rem 1rem;
+     border-radius: 6px;
+     cursor: pointer;
+     transition: background-color 0.3s;
+     display: flex;
+     align-items: center;
+     gap: 0.8rem;
+ }
+
+ /*
+    导航项图标样式
+    字体大小 1.2rem
+    水平居中对齐
+    */
+ .nav-item i {
+     font-size: 1.2rem;
+     flex-shrink: 0;
+ }
+
+ /*
+    导航项文本样式
+    字体大小 1.2rem
+    水平居中对齐
+    */
+ .nav-item span {
+     font-size: 1.2rem;
+     flex-grow: 1;
+ }
+
+ .nav-item span a {
+     color: inherit;
+     font-size: inherit;
+     margin: inherit;
+     text-decoration: none;
+ }
+
+ /*
+    鼠标悬停和激活状态样式
+    鼠标悬停时背景色 rgba(255, 255, 255, 0.1)
+    激活状态背景色 rgba(255, 255, 255, 0.1)
+*/
+ .nav-item:hover,
+ .nav-item.active {
+     background-color: rgba(255, 255, 255, 0.1);
+ }
+
+ /* 导航项图标样式
+    图标宽度 20px
+    水平居中对齐
+    */
+ */ .nav-item i {
+     width: 20px;
+     text-align: center;
+ }
+
+ /* 主内容区域 */
+ .main-content {
+     grid-area: main;
+     padding: 2rem;
+     background-color: #f8f9fa;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+ }
+
+ .page-title {
+     margin-bottom: 2rem;
+     font-size: 2rem;
+     color: #2c3e50;
+ }
+
+ /*
+    grid-template-columns：定义网格容器的列宽和列数
+    repeat()：重复生成相同配置的列
+    auto-fit：自动适应列宽
+    minmax(300px, 1fr)：列宽最小为300px，
+    1fr 表示占据 1 份剩余空间
+*/
+ .dashboard {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+     gap: 1.5rem;
+     margin-bottom: 2rem;
+ }
+
+ /*
+    过渡效果 0.3s
+ */
+ .card {
+     background-color: white;
+     border-radius: 8px;
+     padding: 1.5rem;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+     transition: transform 0.3s, box-shadow 0.3s;
+ }
+
+ /*
+    鼠标悬停效果
+    向上移动 5px
+    阴影 rgba(0, 0, 0, 0.1) 透明度 0.1
+*/
+ .card:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+ }
+
+ .card-title {
+     font-size: 1.1rem;
+     color: #7f8c8d;
+     margin-bottom: 1rem;
+ }
+
+ .card-value {
+     font-size: 2rem;
+     font-weight: bold;
+     color: #2c3e50;
+ }
+
+ .content-section {
+     background-color: white;
+     border-radius: 8px;
+     padding: 1.5rem;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+ }
+
+ .section-title {
+     font-size: 1.4rem;
+     margin-bottom: 1.5rem;
+     color: #2c3e50;
+ }
+
+ /*
+    使用 flex 布局，
+    自动换行
+    间距 1.5rem
+ */
+ .feature-list {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 1.5rem;
+ }
+
+ /*
+    flex: 1 1 0%
+    flex-grow: 1 拉伸及比值
+    flex-shrink: 1 收缩及比值
+    flex-basis: 0 无需考虑内容本身的宽度
+    当容器有剩余空间时，所有项目按比例拉伸
+    当容器空间不足时，项目可以适当收缩，受制于 min-width
+    项目的基础宽度为 0
+    自身也设置为 Flex 容器
+    列方向
+    内部项目水平对齐居中
+    文本内容（如标题、描述）自身水平居中
+*/
+ .feature-item {
+     flex: 1;
+     min-width: 250px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     padding: 1rem;
+     background-color: rgb(182, 209, 233);
+     border-radius: 1rem;
+     box-shadow: 0 2px 10px rgb(182, 209, 233);
+     ;
+     transition: transform 0.3s, box-shadow 0.3s;
+ }
+
+ .feature-item:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+ }
+
+ .feature-icon {
+     font-size: 2.5rem;
+     color: #3498db;
+     margin-bottom: 1rem;
+ }
+
+ /*
+    footer 占据一行
+    设置自身为 Flex 容器
+    space-between
+    表示两端对齐，
+    即第一个项目靠左，
+    最后一个项目靠右，
+    中间项目之间自动分配剩余空间
+ */
+ .footer {
+     grid-area: footer;
+     background-color: #2c3e50;
+     color: white;
+     padding: 1.5rem 2rem;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+ /*
+    footer 中的链接列表
+    使用 Flex 布局
+    水平排列
+    间距 1.5rem
+*/
+ .footer-links {
+     display: flex;
+     gap: 1.5rem;
+ }
+
+ /*
+    footer 中的链接样式
+    颜色 rgba(255, 255, 255, 0.8)
+    无下划线
+
+    过渡效果 0.3s
+*/
+ .footer-link {
+     color: rgba(255, 255, 255, 0.8);
+     text-decoration: none;
+     transition: color 0.3s;
+ }
+
+ /*
+  鼠标悬停时颜色变为白色
+*/
+ .footer-link:hover {
+     color: white;
+ }
+
+ /* 响应式设计 */
+ /*
+    当屏幕宽度小于等于 768px 时，
+    三行，一列，
+    每行占满，
+*/
+ @media (max-width: 768px) {
+
+     body {
+         grid-template-areas:
+             "sidebar"
+             "main"
+             "footer";
+         grid-template-columns: 1fr;
+     }
+
+     .sidebar {
+         padding: 1rem;
+     }
+
+     .main-content {
+         padding: 1rem;
+     }
+
+     /*
+     一列，自动占满
+     */
+     .dashboard {
+         grid-template-columns: 1fr;
+     }
+
+     /*
+        footer 设置为列方向布局
+     */
+     .footer {
+         flex-direction: column;
+         gap: 1rem;
+         text-align: center;
+     }
+ }

@@ -1,0 +1,25 @@
+{% extends 'zhuye/index.html' %} {% load static %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'chat/room.css' %}" />
+{% endblock %} {% block title %} 聊天房间:{{ room_name }} {% endblock %}
+{% block content %}
+<div class="chat-container">
+        <div class="chat-header">
+            房间: {{ room_name }}
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="send">
+            <label id="userLabel">{{ request.user.username|default:"访客" }}</label>
+            <input type="text" id="text"
+            onfocus="this.classList.add('focused')"
+            onblur="if(!this.value.trim()) this.classList.remove('focused')"
+            oninput="this.classList.toggle('has-content', this.value.trim() !== '')">
+            <button onclick="sendMsg()">发送</button>
+        </div>
+    </div>
+    <input type="hidden" id="username" value="{{ request.user.username|default:'访客' }}">
+    <input type="hidden" id="roomName" value="{{ room_name }}">
+{% endblock %}
+<!-- JavaScript 块定义 -->
+{% block js %}
+<script src="{% static 'js/chat/room.js' %}"></script>
+{% endblock %}

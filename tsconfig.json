@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "outDir": "./gerenzhuye/static/js",  // 输出根目录（与源文件的上级目录对应）
+    "rootDirs": [                     // 多个源文件根目录
+      "./gerenzhuye/static/chat/*",
+      "./gerenzhuye/static/zhuye/*"
+    ],
+    "strict": true,
+    "preserveConstEnums": true,
+    "esModuleInterop": true
+  },
+  "include": [                        // 匹配两个目录下的所有 TS 文件
+    "./gerenzhuye/static/chat/*",
+    "./gerenzhuye/static/zhuye/*"
+, "gerenzhuye/static/chat/room.ts"  ],
+  "exclude": ["node_modules"]
+}

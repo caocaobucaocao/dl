@@ -1,0 +1,519 @@
+INFO 2025-08-22 08:26:07,810 autoreload Watching for file changes with StatReloader
+WARNING 2025-08-22 08:26:19,045 log Not Found: /zhuye/userlogin/
+WARNING 2025-08-22 08:26:19,046 basehttp "GET /zhuye/userlogin/ HTTP/1.1" 404 3867
+WARNING 2025-08-22 08:26:19,105 log Not Found: /favicon.ico
+INFO 2025-08-22 08:26:19,107 basehttp - Broken pipe from ('127.0.0.1', 11086)
+INFO 2025-08-22 08:26:25,302 basehttp "GET /zhuye/login/ HTTP/1.1" 200 4445
+INFO 2025-08-22 08:26:25,340 basehttp "GET /static/zhuye/index.css HTTP/1.1" 304 0
+INFO 2025-08-22 08:26:25,359 basehttp "GET /static/zhuye/login.css HTTP/1.1" 304 0
+INFO 2025-08-22 08:26:25,361 basehttp "GET /static/js/index.js HTTP/1.1" 304 0
+INFO 2025-08-22 08:26:25,443 basehttp - Broken pipe from ('127.0.0.1', 11091)
+INFO 2025-08-22 08:26:36,070 basehttp "GET /zhuye/rgst/ HTTP/1.1" 200 5648
+INFO 2025-08-22 08:26:36,125 basehttp "GET /static/zhuye/rgst.css HTTP/1.1" 200 2637
+INFO 2025-08-22 08:27:03,851 basehttp "POST /zhuye/rgst/ HTTP/1.1" 200 5825
+INFO 2025-08-22 08:27:17,380 basehttp "POST /zhuye/rgst/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:27:17,387 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4437
+INFO 2025-08-22 08:27:19,298 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 200 6899
+INFO 2025-08-22 08:27:19,336 basehttp "GET /static/zhuye/uprofile.css HTTP/1.1" 200 3354
+INFO 2025-08-22 08:27:19,340 basehttp "GET /media/avatars/default_avatar.png HTTP/1.1" 304 0
+INFO 2025-08-22 08:27:19,341 basehttp "GET /static/js/zhuye/uprofile.js HTTP/1.1" 304 0
+INFO 2025-08-22 08:27:25,276 basehttp "POST /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:27:25,289 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 200 6906
+INFO 2025-08-22 08:27:25,318 basehttp "GET /media/avatars/avtor_flrmPl8_Y7cayaG.jpg HTTP/1.1" 200 19917
+INFO 2025-08-22 08:27:29,918 basehttp "POST /zhuye/logout/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:27:29,924 basehttp "GET /zhuye/login/ HTTP/1.1" 200 4445
+INFO 2025-08-22 08:29:10,415 autoreload C:\Users\Administrator\Desktop\django\dl\gerenzhuye\gerenzhuye\settings.py changed, reloading.
+INFO 2025-08-22 08:30:05,453 autoreload Watching for file changes with StatReloader
+INFO 2025-08-22 08:30:22,828 basehttp "POST /zhuye/login/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:30:22,839 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4438
+INFO 2025-08-22 08:30:25,804 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 200 6901
+INFO 2025-08-22 08:30:58,407 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 200 6901
+INFO 2025-08-22 08:31:00,474 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 200 6901
+INFO 2025-08-22 08:31:02,556 basehttp "POST /zhuye/logout/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:31:02,565 basehttp "GET /zhuye/login/ HTTP/1.1" 200 4445
+INFO 2025-08-22 08:31:16,805 autoreload C:\Users\Administrator\Desktop\django\dl\gerenzhuye\gerenzhuye\settings.py changed, reloading.
+INFO 2025-08-22 08:31:17,447 autoreload Watching for file changes with StatReloader
+INFO 2025-08-22 08:31:18,563 basehttp "GET /zhuye/login/ HTTP/1.1" 200 4445
+INFO 2025-08-22 08:35:57,420 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:35:57,428 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4445
+INFO 2025-08-22 08:35:57,542 basehttp - Broken pipe from ('127.0.0.1', 11609)
+INFO 2025-08-22 08:35:58,450 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:35:58,456 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4445
+INFO 2025-08-22 08:36:02,512 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4425
+INFO 2025-08-22 08:36:07,899 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4425
+INFO 2025-08-22 08:36:07,925 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 08:36:09,384 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4425
+INFO 2025-08-22 08:36:10,035 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4425
+INFO 2025-08-22 08:36:10,907 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4425
+INFO 2025-08-22 08:38:36,832 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:44:45,766 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 6966
+INFO 2025-08-22 08:48:06,611 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:48:06,698 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7001
+INFO 2025-08-22 08:48:06,700 basehttp "GET /static/js/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 08:48:07,532 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 08:48:07,730 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 08:50:09,264 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:50:09,290 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7028
+INFO 2025-08-22 08:52:23,487 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:52:23,518 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7078
+INFO 2025-08-22 08:53:12,958 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:53:13,022 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7087
+INFO 2025-08-22 08:53:13,024 basehttp "GET /static/js/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 08:53:13,902 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 08:53:13,984 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 08:53:29,466 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:53:29,505 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7087
+INFO 2025-08-22 08:53:29,506 basehttp "GET /static/js/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 08:53:29,779 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 08:53:29,946 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 08:54:15,571 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:54:15,614 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7093
+INFO 2025-08-22 08:54:15,616 basehttp "GET /static/js/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 08:54:16,420 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 08:54:16,554 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 08:54:26,367 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:54:26,402 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7093
+INFO 2025-08-22 08:54:26,404 basehttp "GET /static/js/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 08:54:26,696 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 08:54:26,874 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 08:54:54,640 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:54:54,689 basehttp "GET /static/js/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 08:54:54,690 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7093
+INFO 2025-08-22 08:54:55,171 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 08:54:55,368 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 08:55:54,510 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:55:54,535 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7078
+INFO 2025-08-22 08:56:01,971 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:56:01,992 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7087
+INFO 2025-08-22 08:56:10,106 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:56:10,127 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7087
+INFO 2025-08-22 08:57:44,175 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:57:44,201 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7259
+INFO 2025-08-22 08:57:51,646 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:57:51,655 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4554
+INFO 2025-08-22 08:57:51,711 basehttp "GET /static/zhuye/index.css HTTP/1.1" 304 0
+INFO 2025-08-22 08:57:54,685 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:57:54,712 basehttp "GET /static/zhuye/index.css HTTP/1.1" 304 0
+INFO 2025-08-22 08:58:04,410 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:58:04,417 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4554
+INFO 2025-08-22 08:58:04,467 basehttp "GET /static/zhuye/index.css HTTP/1.1" 304 0
+INFO 2025-08-22 08:58:08,871 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:58:08,878 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4554
+INFO 2025-08-22 08:58:08,925 basehttp "GET /static/zhuye/index.css HTTP/1.1" 304 0
+INFO 2025-08-22 08:58:14,436 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4534
+INFO 2025-08-22 08:58:14,467 basehttp "GET /static/zhuye/index.css HTTP/1.1" 304 0
+INFO 2025-08-22 08:59:10,784 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 08:59:10,790 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4554
+INFO 2025-08-22 08:59:10,841 basehttp "GET /static/zhuye/index.css HTTP/1.1" 304 0
+INFO 2025-08-22 09:04:05,187 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 09:04:05,193 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4554
+INFO 2025-08-22 09:04:05,241 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7259
+INFO 2025-08-22 09:04:07,357 basehttp "GET /zhuye/uprofile/ HTTP/1.1" 302 0
+INFO 2025-08-22 09:04:07,363 basehttp "GET /zhuye/login/?next=/zhuye/uprofile/ HTTP/1.1" 200 4554
+INFO 2025-08-22 09:11:18,578 autoreload Watching for file changes with StatReloader
+INFO 2025-08-22 10:24:58,548 autoreload Watching for file changes with StatReloader
+INFO 2025-08-22 10:25:29,149 autoreload C:\Users\Administrator\Desktop\django\dl\gerenzhuye\chat\urls.py changed, reloading.
+INFO 2025-08-22 10:25:30,154 autoreload Watching for file changes with StatReloader
+INFO 2025-08-22 10:25:34,429 basehttp "GET /chat/room/ssss HTTP/1.1" 301 0
+INFO 2025-08-22 10:25:34,438 basehttp "GET /chat/room/ssss/ HTTP/1.1" 200 1867
+WARNING 2025-08-22 10:25:34,480 log Not Found: /favicon.ico
+WARNING 2025-08-22 10:25:34,480 log Not Found: /ws/chat/ssss/
+INFO 2025-08-22 10:25:34,481 basehttp - Broken pipe from ('127.0.0.1', 16756)
+WARNING 2025-08-22 10:25:34,481 basehttp "GET /ws/chat/ssss/ HTTP/1.1" 404 2854
+WARNING 2025-08-22 11:09:08,726 log Not Found: /zhuye/userrgst/
+ERROR 2025-08-22 11:09:14,784 log Internal Server Error: /zhuye/index/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\gerenzhuye\zhuye\views.py", line 14, in index
+    return render(request, 'zhuye/index.html')
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: zhuye/index.html
+WARNING 2025-08-22 11:09:27,043 log Not Found: /index/
+WARNING 2025-08-22 11:09:43,719 log Not Found: /index/
+WARNING 2025-08-22 11:09:44,971 log Not Found: /index/
+ERROR 2025-08-22 11:09:47,242 log Internal Server Error: /zhuye/index/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\gerenzhuye\zhuye\views.py", line 14, in index
+    return render(request, 'zhuye/index.html')
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: zhuye/index.html
+ERROR 2025-08-22 11:09:48,234 log Internal Server Error: /zhuye/index/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\gerenzhuye\zhuye\views.py", line 14, in index
+    return render(request, 'zhuye/index.html')
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: zhuye/index.html
+ERROR 2025-08-22 11:09:59,368 log Internal Server Error: /zhuye/index/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\gerenzhuye\zhuye\views.py", line 14, in index
+    return render(request, 'zhuye/index.html')
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: zhuye/index.html
+ERROR 2025-08-22 11:10:30,941 log Internal Server Error: /zhuye/index/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\gerenzhuye\zhuye\views.py", line 14, in index
+    return render(request, 'zhuye/index.html')
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: zhuye/index.html
+WARNING 2025-08-22 11:10:52,685 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:10:56,098 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:11:17,814 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:11:18,651 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:11:19,535 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:11:20,908 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:12:28,804 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:12:28,820 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:12:29,579 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:13:41,452 log Not Found: /favicon.ico
+WARNING 2025-08-22 11:13:41,953 log Not Found: /index/
+WARNING 2025-08-22 11:13:42,076 log Not Found: /favicon.ico
+WARNING 2025-08-22 11:13:42,806 log Not Found: /favicon.ico
+WARNING 2025-08-22 11:13:42,921 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:13:43,655 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:13:43,675 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:13:43,933 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:14:20,669 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:14:20,688 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:14:20,923 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:15:35,542 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:15:35,561 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:15:35,891 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:17:21,494 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:18:28,275 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:18:28,293 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:18:28,779 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:18:30,240 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:18:30,259 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:18:30,483 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:24:00,204 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:24:35,017 log Not Found: //zhuye/index.css
+WARNING 2025-08-22 11:24:37,871 log Not Found: /zhuye/index.css
+WARNING 2025-08-22 11:24:50,390 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:24:50,407 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:24:51,148 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:25:06,665 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:25:30,088 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:26:52,038 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:26:52,054 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:26:52,289 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:26:52,533 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:28:02,036 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:28:26,604 log Not Found: /zhuye/static/zhuye/ic.png
+WARNING 2025-08-22 11:28:33,421 log Not Found: /zhuye/ic.png
+WARNING 2025-08-22 11:28:39,626 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:28:39,645 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:29:09,804 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:29:09,825 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:29:11,613 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:29:11,630 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:34:10,911 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:34:11,769 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:36:48,051 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:36:48,069 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:36:48,397 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:36:48,468 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:36:48,592 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:37:35,925 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:37:58,591 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:38:47,641 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:38:57,316 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:39:04,767 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:39:07,432 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:39:14,146 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:41:01,558 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:41:12,999 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:41:23,385 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:41:28,393 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:41:58,272 log Not Found: /static/js/index.js
+WARNING 2025-08-22 11:43:00,555 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:43:00,572 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:43:01,285 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:43:10,734 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:43:10,749 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:43:11,875 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:43:14,099 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:43:14,117 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:43:14,721 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:43:26,072 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:43:26,088 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:43:26,927 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:43:28,961 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:43:28,980 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:43:29,938 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:44:33,273 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:44:33,294 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:44:34,247 log Not Found: /static/zhuye/ic.png
+INFO 2025-08-22 11:44:42,869 autoreload Watching for file changes with StatReloader
+INFO 2025-08-22 11:44:44,876 basehttp "GET /zhuye/login/ HTTP/1.1" 200 4562
+INFO 2025-08-22 11:44:45,130 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7259
+INFO 2025-08-22 11:44:45,140 basehttp "GET /static/js/zhuye/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 11:44:45,141 basehttp "GET /static/zhuye/login.css HTTP/1.1" 200 3118
+INFO 2025-08-22 11:44:45,693 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 11:44:46,106 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+WARNING 2025-08-22 11:44:59,800 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 11:44:59,817 log Not Found: /static/zhuye/login.css
+WARNING 2025-08-22 11:45:00,619 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 11:56:14,930 log Not Found: /favicon.ico
+WARNING 2025-08-22 12:00:14,269 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:00:15,836 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:00:24,660 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:00:25,759 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:00:26,444 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:00:26,782 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:01:25,243 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:01:26,937 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:01:27,559 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:01:27,869 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:03:55,880 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:03:56,861 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 12:04:15,562 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:04:16,168 log Not Found: /static/zhuye/ic.png
+INFO 2025-08-22 12:04:40,502 autoreload Watching for file changes with StatReloader
+INFO 2025-08-22 12:04:42,308 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4541
+INFO 2025-08-22 12:04:42,456 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7259
+INFO 2025-08-22 12:04:42,469 basehttp "GET /static/js/zhuye/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 12:04:42,773 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 12:04:42,928 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+INFO 2025-08-22 12:05:07,142 basehttp "GET /zhuye/index/ HTTP/1.1" 200 4541
+INFO 2025-08-22 12:05:07,191 basehttp "GET /static/zhuye/index.css HTTP/1.1" 200 7259
+INFO 2025-08-22 12:05:07,192 basehttp "GET /static/js/zhuye/index.js HTTP/1.1" 200 674
+INFO 2025-08-22 12:05:07,733 basehttp "GET /static/fonts/Alibaba-PuHuiTi-Light.ttf HTTP/1.1" 200 9712008
+INFO 2025-08-22 12:05:07,862 basehttp "GET /static/zhuye/ic.png HTTP/1.1" 200 29352
+WARNING 2025-08-22 12:05:15,988 log Not Found: /static/zhuye/index.css
+WARNING 2025-08-22 12:05:16,553 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 12:28:42,389 log Not Found: /favicon.ico
+WARNING 2025-08-22 12:29:30,157 log Not Found: /zhuye/userlogin/
+WARNING 2025-08-22 12:30:23,604 log Not Found: /favicon.ico
+ERROR 2025-08-22 12:44:33,950 log Internal Server Error: /chat/room/ssss/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\asgiref\sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\django\dl\gerenzhuye\chat\views.py", line 6, in chat_room
+    return render(request, 'chat/chat_room.html', {'room_name': room_name})
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\django\dl\Lib\site-packages\django\template\base.py", line 577, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 12: 'endblock'. Did you forget to register or load this tag?
+WARNING 2025-08-22 12:44:34,153 log Not Found: /favicon.ico
+WARNING 2025-08-22 13:20:46,840 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:21:23,335 log Not Found: /static/js/zhuye/index.js
+WARNING 2025-08-22 13:21:23,803 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:21:34,872 log Not Found: /static/js/zhuye/index.js
+WARNING 2025-08-22 13:21:35,202 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:23:03,782 log Not Found: /static/js/zhuye/index.js
+WARNING 2025-08-22 13:23:04,126 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:23:18,096 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:23:21,724 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:24:41,708 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:24:43,550 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:24:45,807 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:30:03,091 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:35:06,505 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 13:36:19,849 log Not Found: /static/zhuye/ic.png
+WARNING 2025-08-22 14:44:29,907 log Not Found: /static/js/zhuye/uprofile.js
+WARNING 2025-08-22 14:46:19,262 log Not Found: /static/js/zhuye/uprofile.js
+WARNING 2025-08-22 14:46:22,320 log Not Found: /static/js/zhuye/uprofile.js
+WARNING 2025-08-22 14:46:23,461 log Not Found: /static/js/zhuye/uprofile.js
+WARNING 2025-08-22 15:18:48,240 log Not Found: /static/js/zhuye/uprofile.js
+WARNING 2025-08-22 15:18:49,165 log Not Found: /static/js/zhuye/uprofile.js
+WARNING 2025-08-22 16:19:37,651 log Not Found: /static/js/chat/room.js
+WARNING 2025-08-22 16:20:28,486 log Not Found: /static/js/chat/room.js
+WARNING 2025-08-22 16:31:24,390 log Not Found: /static/js/room.js
+WARNING 2025-08-22 16:31:37,476 log Not Found: /zhuye/userrgst/
+WARNING 2025-08-22 16:31:37,618 log Not Found: /favicon.ico
+WARNING 2025-08-22 16:31:42,895 log Not Found: /static/js/index.js
+WARNING 2025-08-22 16:31:45,827 log Not Found: /static/js/index.js

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'zhuye/index.css' %}" />
+    <link rel="icon" href="{% static 'ic.png' %}" type="image/png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{% block title %}我的网站{% endblock %}</title>
+    <style>
+      /* 引入本地字体 */
+      @font-face {
+        font-family: "Alibaba PuHuiTi";
+        src: url("{% static 'fonts/Alibaba-PuHuiTi-Light.ttf' %}")
+          format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+      /* 应用字体（同上） */
+      body {
+        font-family: "Alibaba PuHuiTi", sans-serif;
+      }
+    </style>
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <!-- 可以放在main-content区域的顶部 -->
+{% if user.is_authenticated %}
+  <p>当前登录用户: {{ user.username }}</p>
+{% else %}
+  <p>您尚未登录</p>
+{% endif %}
+    <!-- 左侧导航 -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fa-solid fa-cube"></i>
+        <span>我的网站</span>
+      </div>
+
+      <nav class="nav-links">
+        <div class="nav-item active">
+          <i class="fas fa-home"></i>
+          <span><a href='{% url "index" %}'>首页</a></span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-user"></i>
+          <span><a href="{% url 'uprofile' %}">个人中心</a></span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-th-list"></i>
+          <span>数据列表</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-cog"></i>
+          <span>设置</span>
+        </div>
+        <div id="exit" class="nav-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <span><a href="javascript:void(0);">退出</a></span>
+        </div>
+        <!-- 隐藏的表单 -->
+        <form
+          id="logoutForm"
+          action="{% url 'logout' %}"
+          method="post"
+          class="hidden"
+        >
+          <!-- CSRF令牌（用于Django等框架的安全验证） -->
+          {% csrf_token %}
+        </form>
+        <div class="nav-item">
+          <i class="fas fa-question-circle"></i>
+          <span>帮助中心</span>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧内容 -->
+    <main class="main-content">
+      {% block content %}
+      <h1 class="page-title">欢迎来到首页</h1>
+      <div class="dashboard">
+        <div class="card">
+          <div class="card-title">总访问量</div>
+          <div class="card-value">24,589</div>
+        </div>
+        <div class="card">
+          <div class="card-title">今日访问</div>
+          <div class="card-value">1,254</div>
+        </div>
+        <div class="card">
+          <div class="card-title">活跃用户</div>
+          <div class="card-value">8,741</div>
+        </div>
+      </div>
+
+      <section class="content-section">
+        <h2 class="section-title">主要功能</h2>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-line-chart"></i>
+            </div>
+            <h3>数据分析</h3>
+            <p>提供详细的数据分析和可视化报表，帮助您做出明智决策</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>安全保障</h3>
+            <p>高级安全措施保护您的数据安全和隐私</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>移动响应</h3>
+            <p>完全响应式设计，在任何设备上都有出色表现</p>
+          </div>
+        </div>
+      </section>
+      {% endblock %}
+    </main>
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="copyright">© 2023 我的网站. 保留所有权利</div>
+      <div class="footer-links">
+        <a href="{% static 'PrivacyPolicy.html' %}" class="footer-link"
+          >隐私政策</a
+        >
+        <a href="{% static 'terms-of-service.html' %}" class="footer-link"
+          >使用条款</a
+        >
+        <a href="{% url 'chat_room' 'customer_service'%}" class="footer-link">联系我们</a>
+      </div>
+    </footer>
+
+<!-- JavaScript 块定义 -->
+{% block js %}
+<!-- 将原有的script标签替换为 -->
+<script src="{% static 'js/zhuye/index.js' %}"></script>
+{% endblock %}
+  </body>
+</html>

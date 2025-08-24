@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
-from datetime import date,datetime
+from datetime import date
 # Create your models here.
 
 

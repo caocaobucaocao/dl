@@ -15,6 +15,7 @@ const roomNameInput = document.getElementById('roomName');
 const messagesContainer = document.getElementById('messages');
 const usernameInput = document.getElementById('username');
 const textInput = document.getElementById('text');
+const roomNameTitle = document.querySelector('.chat-header');
 // 检查必要元素是否存在
 if (!roomNameInput || !messagesContainer || !usernameInput || !textInput) {
     throw new Error('必要的DOM元素未找到');
@@ -58,10 +59,11 @@ ws.onmessage = function (e) {
 function sendMsg() {
     const text = textInput.value.trim();
     const username = usernameInput.value.trim() || '访客';
+    const roomName = roomNameInput.value.trim() || 'default';
     if (text) {
         const messageData = {
+            username: username,
             message: text,
-            username: username
         };
         ws.send(JSON.stringify(messageData));
         textInput.value = ''; // 清空输入框

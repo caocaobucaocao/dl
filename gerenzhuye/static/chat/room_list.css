@@ -1,0 +1,202 @@
+.room-card {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* 使用现代无衬线字体 */
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 500px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#roomListForm {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+    gap: 1rem;
+}
+
+.room-card-item {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    justify-content: space-between;
+    align-content: space-around;
+}
+
+.flex-grow {
+    display: flex;
+    flex-direction: row;
+    align-content: start;
+    text-align: center;
+    gap: 1rem;
+}
+
+.register-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+}
+
+/* 统一设置所有表单提示文本颜色 */
+form label {
+    color: #000000;
+    /* 标签文字颜色 */
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+form .helptext {
+    color: #333333;
+    /* 帮助文本颜色 */
+    font-size: 0.9em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+form ul.errorlist {
+    color: #d32f2f;
+    /* 错误提示颜色 */
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    color: #2c3e50;
+
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-hint {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #7f8c8d;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #2c3e50;
+}
+
+.form-checkbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: space-between;
+}
+
+.rmbm {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.rmbm span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.rmbm a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.rmbm a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.form-checkbox input {
+    width: 1rem;
+    height: 1rem;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn:hover {
+    background-color: #34495e;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #7f8c8d;
+}
+
+.register-link a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.register-link a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .room-card {
+    margin-left: min(30rem, 30rem);
+    }
+}

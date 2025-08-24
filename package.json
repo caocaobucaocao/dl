@@ -17,8 +17,8 @@
     "url": "https://github.com/caocaobucaocao/dl/issues"
   },
   "homepage": "https://github.com/caocaobucaocao/dl#readme",
-  "description": "",
   "devDependencies": {
     "typescript": "^5.9.2"
-  }
+  },
+  "description": ""
 }

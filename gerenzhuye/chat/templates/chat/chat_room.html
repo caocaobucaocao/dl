@@ -1,4 +1,6 @@
-{% extends 'zhuye/index.html' %} {% load static %} {% block extra_css %}
+{% extends 'zhuye/index.html' %} {% load static %}
+{% load customer_tags %}
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'chat/room.css' %}" />
 {% endblock %} {% block title %} 聊天房间:{{ room_name }} {% endblock %}
 {% block content %}
@@ -16,7 +18,11 @@
             <button onclick="sendMsg()">发送</button>
         </div>
     </div>
-    <input type="hidden" id="username" value="{{ request.user.username|default:'访客' }}">
+    {% if user.is_authenticated %}
+         <input type="hidden" id="username" value="{{ request.user.username }}">
+    {% else %}
+        <input type="hidden" id="username" value="{{ 1000|random_number }}">
+    {% endif %}
     <input type="hidden" id="roomName" value="{{ room_name }}">
 {% endblock %}
 <!-- JavaScript 块定义 -->

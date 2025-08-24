@@ -1,0 +1,42 @@
+{% extends 'zhuye/index.html' %}
+{% load static %}
+{% block title %}房间列表{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'chat/room_list.css' %}">
+{% endblock %}
+{% block content %}
+    <h1 class="page-title">房间选择</h1>
+    <div class="room-card">
+        <form method="post" action="{% url 'chat_room_list' %}" id="roomListForm">
+            {% csrf_token %}
+            {% for room in rooms %}
+                <div class="room-card-item">
+                    <!-- 房间图标 -->
+                    <div class="">
+                        <i class="fa fa-comments"></i>
+                    </div>
+                    <!-- 房间信息 -->
+                    <div class="flex-grow">
+                        <h3 class="font-medium text-gray-800">{{ room.room_name }}</h3>
+                        <p class="text-sm text-gray-500">
+                            <i class="fa fa-user-o mr-1"></i>
+                            成员: {{ room.member_count|default:0 }}
+                        </p>
+                    </div>
+                    <!-- 进入链接（修复空链接问题） -->
+                    <a href="{% url 'chat_room' room.room_name %}">
+                        <i class="fa fa-arrow-right "></i>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="flex-grow">
+                    <i class="fa fa-info-circle mr-2"></i>
+                    <h3 class="font-medium text-gray-800">默认聊天组</h3>
+                    <a href="{% url 'chat_room' 'default' %}">
+                        <i class="fa fa-arrow-right "></i>
+                    </a>
+                </div>
+            {% endfor %}
+        </form>
+    </div>
+{% endblock %}

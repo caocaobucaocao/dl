@@ -16,7 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -37,13 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'zhuye',
     'channels',  # 添加 Channels 应用
-    'chat',      # 新增的聊天应用（下一步创建）
+    'zhuye',
+    'chat',  # 新增的聊天应用（下一步创建）
 ]
 # 正确配置（指向asgi.py中的application变量
 # # 格式：daphne 项目名.asgi:application
 # daphne gerenzhuye.asgi:application
+# 确认当前工作目录是项目根目录（即包含gerenzhuye文件夹的目录），否则可能导致 Python 无法正确识别模块路径。
+
 ASGI_APPLICATION = 'gerenzhuye.asgi.application'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +72,7 @@ TEMPLATES = [
         },
     },
 ]
-
+APP_DIRS = True
 
 # 配置通道层（用于跨进程通信，开发环境可用内存，生产用Redis）
 CHANNEL_LAYERS = {
@@ -95,7 +96,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -114,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -126,15 +125,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
+
 
 # 静态文件配置（默认头像等固定资源）
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),
-                    os.path.join(BASE_DIR, 'zhuye/static'),]  # 开发环境静态文件目录
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]  # 开发环境静态文件目录
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # 生产环境收集目录（开发环境可不关心）
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -181,7 +179,7 @@ LOGGING = {
     },
     # 处理器
     'handlers': {
-     'db_file': {
+        'db_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'db.log'),

@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>{% block title %}我的网站{% endblock %}</title>
     <style>
-      /* 引入本地字体 */
-      @font-face {
-        font-family: "Alibaba PuHuiTi";
-        src: url("{% static 'fonts/Alibaba-PuHuiTi-Light.ttf' %}")
-          format("truetype");
-        font-weight: normal;
-        font-style: normal;
-      }
-      /* 应用字体（同上） */
-      body {
-        font-family: "Alibaba PuHuiTi", sans-serif;
-      }
+      {#/* 引入本地字体 */#}
+      {#@font-face {#}
+      {#  font-family: "Alibaba PuHuiTi";#}
+      {#  src: url("{% static 'fonts/Alibaba-PuHuiTi-Light.ttf' %}")#}
+      {#    format("truetype");#}
+      {#  font-weight: normal;#}
+      {#  font-style: normal;#}
+
+      {#/* 应用字体（同上） */#}
+      {#body {#}
+      {#  font-family: "Alibaba PuHuiTi", sans-serif;#}
+
     </style>
     {% block extra_css %}{% endblock %}
   </head>

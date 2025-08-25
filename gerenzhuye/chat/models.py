@@ -3,6 +3,7 @@ from zhuye.models import User
 
 time_format = '%Y-%m-%d %H:%M:%S'
 
+
 class Room(models.Model):
     room_id = models.AutoField(primary_key=True)
     room_name = models.CharField(max_length=100)
@@ -23,3 +24,12 @@ class Chat(models.Model):
 
     def __str__(self):
         return f'[{self.chat_id},{self.chat_from},{self.chat_content},{self.created_at.strftime(time_format)},{self.room_id}]'
+
+
+class VoiceMessage(models.Model):
+    id = models.AutoField(primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room2voice')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user2voice')
+    file_path = models.CharField(max_length=100)
+

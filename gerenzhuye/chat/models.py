@@ -19,13 +19,7 @@ class Chat(models.Model):
     chat_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user2chat')
     chat_content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room2chat')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room2chat')
 
     def __str__(self):
         return f'[{self.chat_id},{self.chat_from},{self.chat_content},{self.created_at.strftime(time_format)},{self.room_id}]'
-
-class DefaultChat(models.Model):
-    chat_id = models.AutoField(primary_key=True)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room2chat')

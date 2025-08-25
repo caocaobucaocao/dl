@@ -4,6 +4,7 @@ import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
+
 class ChatConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
@@ -21,6 +22,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         # 接受链接
         await self.accept()
+        # 当连接建立时，向房间内所有成员发送通知消息
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',  # 对应处理消息的方法名
+                'message': '加入了房间',
+                'username': self.scope['user'].username  # 可以标识是系统消息
+            }
+        )
+
+
+
+        # 2. 用sync_to_async包装同步函数并调用
+        chat_data_list = await sync_to_async(get_room_chat_data, thread_sensitive=False)(self.room_name)
+
+        # 3. 迭代处理普通Python列表（非查询集）
+        for chat_data in chat_data_list:
+            await self.channel_layer.send(
+                self.channel_name,
+                {
+                    'type': 'chat_message',
+                    'message': chat_data['message'],
+                    'username': chat_data['username']
+                }
+            )
 
     async def disconnect(self, close_code):
         '''
@@ -37,15 +63,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         username = text_data_json.get('username')
 
         from .models import Chat, Room
-        from  zhuye.models import User
+        from zhuye.models import User
         # 异步包装数据库操作
-        get_room = sync_to_async(Room.objects.get_or_create, thread_sensitive=True)
-        room, _ = await get_room(room_name=self.room_name)
+        creat_room = sync_to_async(Room.objects.get_or_create, thread_sensitive=True)
+        room, _ = await creat_room(room_name=self.room_name)
         create_chat = sync_to_async(Chat.objects.create, thread_sensitive=True)
-        create_user=sync_to_async(User.objects.get, thread_sensitive=True)
+        create_user = sync_to_async(User.objects.get, thread_sensitive=True)
         # 直接获取用户ID（关键修改）
+        # 1 代表默认用户
         user_id = self.scope['user'].id if self.scope['user'].is_authenticated else 1
-        user_ins= await create_user(id=user_id)
+        user_ins = await create_user(id=user_id)
         await create_chat(
             chat_from=user_ins,
             chat_content=message,
@@ -62,3 +89,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': event['username'],
             'message': event['message']
         }))
+
+# 1. 定义一个同步函数，一次性完成查询和数据提取
+def get_room_chat_data(room_name):
+    from .models import Room, Chat
+    # 同步环境中执行所有ORM操作
+    room = Room.objects.get(room_name=room_name)
+    chats = Chat.objects.filter(room=room)
+    # 提取需要的数据（转换为普通Python字典/列表，避免在异步中操作查询集）
+    return [
+        {
+            'message': chat.chat_content,
+            'username': chat.chat_from.username
+        }
+        for chat in chats
+    ]

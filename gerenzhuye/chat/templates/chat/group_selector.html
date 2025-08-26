@@ -17,14 +17,14 @@
                     </div>
                     <!-- 房间信息 -->
                     <div class="flex-grow">
-                        <h3 class="font-medium text-gray-800">{{ room.room_name }}</h3>
+                        <h3 class="font-medium text-gray-800">{{ room.name }}</h3>
                         <p class="text-sm text-gray-500">
                             <i class="fa fa-user-o mr-1"></i>
-                            成员: {{ room.member_count|default:0 }}
+                            成员: {{ room.memberCount|default:0 }}
                         </p>
                     </div>
                     <!-- 进入链接（修复空链接问题） -->
-                    <a href="{% url 'chat_room' room.room_name %}">
+                    <a href="{% url 'chat_room' room.name %}">
                         <i class="fa fa-arrow-right "></i>
                     </a>
                 </div>

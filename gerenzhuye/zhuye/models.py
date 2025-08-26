@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 from datetime import date
-# Create your models here.
 
 
 class User (AbstractUser):
@@ -21,7 +20,7 @@ class User (AbstractUser):
         return reverse('zhuye:user_detail', kwargs={'pk': self.pk})
     def __str__(self):
         """Unicode representation of ZhuYeUser."""
-        return f'[name={self.username},email={self.email},phone={self.phone}]'
+        return f'[name={self.username},email={self.email}]'
 
 class Uprofile(models.Model):
     """用户档案"""

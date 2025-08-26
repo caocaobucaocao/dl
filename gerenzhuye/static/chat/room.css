@@ -55,9 +55,11 @@
 
     .send {
         display: flex;
-        padding: 15px;
+        padding: 1rem;
         background-color: #fff;
         border-top: 1px solid #ddd;
+        flex-wrap: wrap;
+        flex-direction: column;
     }
 
     #userLabel {

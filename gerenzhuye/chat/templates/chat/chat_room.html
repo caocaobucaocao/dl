@@ -16,6 +16,10 @@
                    onblur="if(!this.value.trim()) this.classList.remove('focused')"
                    oninput="this.classList.toggle('has-content', this.value.trim() !== '')">
             <button onclick="sendMsg()">发送</button>
+            <button id="startRecord">开始录音</button>
+            <button id="stopRecord" disabled>停止录音</button>
+            <button id="playRecord" disabled>播放本地录音</button>
+            <button onclick="sendVideo()">发送语音</button>
         </div>
     </div>
     {% if user.is_authenticated %}

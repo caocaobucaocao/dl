@@ -1,8 +1,30 @@
 # chat/consumers.py
+import datetime
 import json
+import os
 
-from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.conf import settings
+from zhuye.models import User
+from .models import Room, Chat
+from channels.db import sync_to_async
+from gerenzhuye.settings import UN_LOGIN_NAME, UN_LOGIN_ID, UN_EMAIL
+
+
+# 1. 定义一个同步函数，一次性完成查询和数据提取
+def get_chat_by_room_name(name):
+    # 同步环境中执行所有ORM操作
+    room = Room.objects.get(name=name)
+    chats = Chat.objects.filter(Room=room)
+    # 提取需要的数据（转换为普通Python字典/列表，避免在异步中操作查询集）
+    return [
+        {
+            'username': item.User.username,
+            'message': item.message,
+            'message_type': item.type,
+        }
+        for item in chats
+    ]
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -26,24 +48,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'chat_message',  # 对应处理消息的方法名
+                'type': 'handle_message',  # 对应处理消息的方法名
                 'message': '加入了房间',
-                'username': self.scope['user'].username or 'default'  # 可以标识是系统消息
+                'username': self.scope['user'].username or 'default',  # 可以标识是系统消息
+                'message_type': 'text'
             }
         )
         # 2. 用sync_to_async包装同步函数并调用
-        chat_data_list = await sync_to_async(get_room_chat_data, thread_sensitive=False)(self.room_name)
+        chatDatas = await sync_to_async(get_chat_by_room_name, thread_sensitive=False)(self.room_name)
 
         # 3. 迭代处理普通Python列表（非查询集）
-        for chat_data in chat_data_list:
+        for i in chatDatas:
             await self.channel_layer.send(
                 self.channel_name,
                 {
-                    'type': 'chat_message',
-                    'message': chat_data['message'],
-                    'username': chat_data['username']
+                    'type': 'handle_message',
+                    'message': i['message'],
+                    'username': i['username'],
+                    'message_type': i['message_type'],
                 }
             )
+
+        def update_room_member_count(room_name):
+            room = Room.objects.get(name=room_name)
+            room.member_count = max(0, room.memberCount + 1)  # 确保不会出现负数
+            room.save()  # 同步保存操作
+            return room
+
+        # 用sync_to_async包装整个同步逻辑
+        await sync_to_async(update_room_member_count, thread_sensitive=False)(self.room_name)
 
     async def disconnect(self, close_code):
         '''
@@ -54,134 +87,133 @@ class ChatConsumer(AsyncWebsocketConsumer):
         '''
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
         await self.close()
-        await self.room_update()
+        await self.update_room_member_count()
 
-    async def room_update(self):
-        from .models import Room
-        from channels.db import sync_to_async
+    async def update_room_member_count(self):
         # 定义同步函数处理所有ORM操作
-        def update_room_member_count(room_name):
-            room = Room.objects.get(room_name=room_name)
-            room.member_count = max(0, room.member_count - 1)  # 确保不会出现负数
+        def _update_room_member_count(room_name):
+            room = Room.objects.get(name=room_name)
+            room.member_count = max(0, room.memberCount - 1)  # 确保不会出现负数
             room.save()  # 同步保存操作
             return room
 
         # 用sync_to_async包装整个同步逻辑
-        await sync_to_async(update_room_member_count, thread_sensitive=False)(self.room_name)
+        await sync_to_async(_update_room_member_count, thread_sensitive=False)(self.room_name)
 
     async def receive(self, text_data=None, bytes_data=None):
         if text_data is not None:
-            text_data_json = json.loads(text_data)
-            message = text_data_json['message']
-            username = text_data_json.get('username')
-            from .models import Chat, Room
-            from zhuye.models import User
-            # 异步包装数据库操作
-            creat_room = sync_to_async(Room.objects.get_or_create, thread_sensitive=True)
-            room, _ = await creat_room(room_name=self.room_name)
-            create_chat = sync_to_async(Chat.objects.create, thread_sensitive=True)
-            create_user = sync_to_async(User.objects.get, thread_sensitive=True)
-            # 直接获取用户ID（关键修改）
-            # 1 代表默认用户
-            user_id = self.scope['user'].id if self.scope['user'].is_authenticated else 1
-            user_ins = await create_user(id=user_id)
-            await create_chat(
-                chat_from=user_ins,
-                chat_content=message,
-                room=room
-            )  # create()已隐含save()，无需重复调用
-            # 发送消息到房间内所有用户
+            await self.handle_json_data(text_data)
+        elif bytes_data is not None:
+            await self.handle_bytes(bytes_data)
+
+    async def handle_bytes(self, bytes_data):
+        try:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            file_name = f"{timestamp}.webm"
+            save_path = os.path.join(settings.MEDIA_ROOT, 'voices', file_name)
+
+            # 保存语音并创建记录
+            voice_msg = await self.save_voice_message(
+                self.room_name,
+                bytes_data,
+                file_name,
+                save_path
+            )
+            # 广播语音消息（发送语音ID而非原始数据）
             await self.channel_layer.group_send(
                 self.room_group_name,
-                {'type': 'chat_message', 'username': username, 'message': message}
+                {
+                    'type': 'handle_message',
+                    'username': self.scope['user'].username if self.scope['user'].is_authenticated else UN_LOGIN_NAME,
+                    'message': voice_msg.message,
+                    'message_type': 'voice',
+                }
             )
-        elif bytes_data is not None:
-            print('bytes_data')
-            try:
-                from .models import Chat, Room, VoiceMessage
-                from zhuye.models import User
-                import os
-                from django.conf import settings
-                import uuid
-                import datetime
 
+        except Exception as e:
+            print(f"处理语音消息错误: {str(e)}")
 
-                timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-                filename = f"{timestamp}.webm"
-                save_path = os.path.join(settings.MEDIA_ROOT, 'voices', filename)
+    async def handle_json_data(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+        # 关键改进：使用服务器端认证的用户名，而非客户端提交的
+        if self.scope['user'].is_authenticated:
+            username = self.scope['user'].username  # 从认证系统获取
+        else:
+            username = UN_LOGIN_NAME  # 未登录用户的默认名
+        # 异步包装数据库操作
+        creat_room = sync_to_async(Room.objects.get_or_create, thread_sensitive=True)
+        room, _ = await creat_room(name=self.room_name)
+        create_chat = sync_to_async(Chat.objects.create, thread_sensitive=True)
+        # 获取或创建用户实例（关键修复）
+        if self.scope['user'].is_authenticated:
+            # 已登录用户直接使用
+            user_ins = self.scope['user']
+        else:
+            get_or_create_user = sync_to_async(User.objects.get_or_create, thread_sensitive=True)
+            user_tuple = await get_or_create_user(
+                id=UN_LOGIN_ID,
+                defaults={
+                    'username': UN_LOGIN_NAME,
+                    'email': UN_EMAIL,
+                }
+            )
+            # get_or_create返回元组：(实例, 是否新建)，我们只需要实例
+            user_ins = user_tuple[0]
+        await create_chat(
+            User=user_ins,
+            message=message,
+            Room=room,
+            type=text_data_json['message_type'],
+        )  # create()已隐含save()，无需重复调用
+        # 发送消息到房间内所有用户
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {'type': 'handle_message', 'username': username, 'message': message,
+             'message_type': text_data_json['message_type']}
+        )
 
-                # 异步处理语音存储
-                @sync_to_async(thread_sensitive=True)
-                def save_voice_message(room_name, user_id_, voice_data, filename_):
-                    # 确保目录存在
-                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    # 异步处理语音存储
+    @sync_to_async(thread_sensitive=True)
+    def save_voice_message(self, room_name, voice_data, file_name, save_path):
+        # 确保目录存在
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
-                    # 保存语音文件
-                    with open(save_path, 'wb') as f:
-                        f.write(voice_data)
+        # 保存语音文件
+        with open(save_path, 'wb') as f:
+            f.write(voice_data)
 
-                    # 创建数据库记录
-                    room_, _ = Room.objects.get_or_create(room_name=room_name)
-                    user = User.objects.get(id=user_id_)
+        # 创建数据库记录
+        room, _ = Room.objects.get_or_create(name=room_name)
+        user_tuple = User.objects.get_or_create(
+            id=UN_LOGIN_ID,
+            defaults={
+                'username': UN_LOGIN_NAME,
+                'email': UN_EMAIL,
+            }
+        )
+        # get_or_create返回元组：(实例, 是否新建)，我们只需要实例
+        user_ins = user_tuple[0]
 
-                    # 创建语音消息记录
-                    voice_msg_ = VoiceMessage.objects.create(
-                        user=user,
-                        room=room_,
-                        file_path=os.path.join('voices', filename_),
-                    )
-                    return voice_msg_
+        # 创建语音消息记录
+        msg = Chat.objects.create(
+            User=user_ins,
+            Room=room,
+            message=os.path.join('voices', file_name),
+            type='voice'
+        )
+        return msg
 
-                # 获取用户ID
-                user_id = self.scope['user'].id if self.scope['user'].is_authenticated else 1
-
-                # 保存语音并创建记录
-                voice_msg = await save_voice_message(
-                    self.room_name,
-                    user_id,
-                    bytes_data,
-                    filename
-                )
-                print('voice_msg',voice_msg.file_path)
-                # 广播语音消息（发送语音ID而非原始数据）
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'video_message',
-                        'username': self.scope['user'].username if self.scope['user'].is_authenticated else '匿名用户',
-                        'message': voice_msg.file_path,  # 传递语音唯一标识
-                        'message_type': 'voice',
-                    }
-                )
-
-            except Exception as e:
-                print(f"处理语音消息错误: {str(e)}")
-
-    async def chat_message(self, event):
-        await self.send(text_data=json.dumps({
+    async def handle_message(self, event):
+        # 基础消息数据
+        message_data = {
             'username': event['username'],
-            'message': event['message'],
-        }))
-
-    async def video_message(self, event):
-        await self.send(text_data=json.dumps({
-            'username': event['username'],
-            'message': event['message'],
-            'message_type': event['message_type'],
-        }))
-
-
-# 1. 定义一个同步函数，一次性完成查询和数据提取
-def get_room_chat_data(room_name):
-    from .models import Room, Chat
-    # 同步环境中执行所有ORM操作
-    room = Room.objects.get(room_name=room_name)
-    chats = Chat.objects.filter(room=room)
-    # 提取需要的数据（转换为普通Python字典/列表，避免在异步中操作查询集）
-    return [
-        {
-            'message': chat.chat_content,
-            'username': chat.chat_from.username
+            'message': event['message']
         }
-        for chat in chats
-    ]
+
+        # 如果是视频消息，添加消息类型字段
+        if 'message_type' in event:
+            message_data['message_type'] = event['message_type']
+
+        # 发送消息
+        await self.send(text_data=json.dumps(message_data))

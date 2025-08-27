@@ -34,11 +34,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = None
 
     async def connect(self):
-        '''
+        """
         异步函数，
         ws客户端建立连接，触发
         scope：类似 Django 视图中的 request，链接信息
-        '''
+        """
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -79,12 +79,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await sync_to_async(update_room_member_count, thread_sensitive=False)(self.room_name)
 
     async def disconnect(self, close_code):
-        '''
+        """
         异步，
         ws断开连接时触发
         close_code:连接关闭的状态码
         当前连接的唯一标识（self.channel_name）从房间组（self.room_group_name）中移除
-        '''
+        """
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
         await self.close()
         await self.update_room_member_count()
@@ -182,16 +182,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 保存语音文件
         with open(save_path, 'wb') as f:
             f.write(voice_data)
-
         # 创建数据库记录
         room, _ = Room.objects.get_or_create(name=room_name)
-        user_tuple = User.objects.get_or_create(
-            id=UN_LOGIN_ID,
-            defaults={
-                'username': UN_LOGIN_NAME,
-                'email': UN_EMAIL,
-            }
-        )
+        # 假设 UN_LOGIN_ID 是未登录用户的固定 ID（确保这个 ID 不会与现有用户冲突）
+        if self.scope['user'].is_authenticated:  # 判断用户是否登录
+            # 登录用户：用自身 ID 查询/创建
+            user_tuple = User.objects.get_or_create(
+                id=self.scope['user'].id,
+                defaults={
+                    'username': self.scope['user'].username,  # 用登录用户的用户名
+                    'email': self.scope['user'].email,  # 用登录用户的邮箱
+                    # 不指定 id，使用查询条件中的 self.scope['user'].id
+                }
+            )
+        else:
+            # 未登录用户：用固定的 UN_LOGIN_ID 查询/创建
+            user_tuple = User.objects.get_or_create(
+                id=UN_LOGIN_ID,  # 查询条件与创建的 id 保持一致
+                defaults={
+                    'username': UN_LOGIN_NAME,
+                    'email': UN_EMAIL,
+                    # 这里可以省略 id，因为查询条件已经指定了 UN_LOGIN_ID
+                }
+            )
         # get_or_create返回元组：(实例, 是否新建)，我们只需要实例
         user_ins = user_tuple[0]
 

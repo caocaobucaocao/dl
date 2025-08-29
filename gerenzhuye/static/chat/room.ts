@@ -70,129 +70,102 @@ const ws = new WebSocket(
 // 初始化音频上下文
 new (window.AudioContext || (window as any).webkitAudioContext)();
 
+// 开始录音
 async function startRecording(): Promise<boolean> {
-    // 如果正在录音，直接返回已完成的Promise
-    if (state.isRecording) {
-        return Promise.resolve(false);
-    }
+    // 已在录音状态直接返回
+    if (state.isRecording) return false;
 
-    // 返回新的Promise封装异步操作
-    return new Promise((resolve, reject) => {
-        // 申请麦克风权限（异步操作）
-        navigator.mediaDevices.getUserMedia({
+    try {
+        // 申请麦克风权限并配置音频参数
+        const stream = await navigator.mediaDevices.getUserMedia({
             audio: {
                 echoCancellation: true,
                 noiseSuppression: true,
                 sampleRate: 44100
             }
-        })
-            .then((stream: MediaStream) => {
-                // 初始化 MediaRecorder
-                const mediaRecorder: MediaRecorder = new MediaRecorder(stream, {
-                    mimeType: 'audio/webm; codecs=opus'
-                });
+        });
 
-                // 更新状态
-                state.isRecording = true;
-                state.mediaRecorder = mediaRecorder;
-                state.audioChunks = [];
-                state.stream = stream;
+        // 初始化录音器
+        const mediaRecorder = new MediaRecorder(stream, {
+            mimeType: 'audio/webm; codecs=opus'
+        });
 
-                // 监听录音数据（收集录音片段）
-                mediaRecorder.ondataavailable = (e: BlobEvent) => {
-                    if (e.data.size > 0) {
-                        state.audioChunks.push(e.data);
-                    }
-                };
+        // 重置并更新状态
+        state.isRecording = true;
+        state.mediaRecorder = mediaRecorder;
+        state.audioChunks = [];
+        state.stream = stream;
 
-                // 开始录音
-                mediaRecorder.start();
-                // 成功启动录音，解析Promise为true
-                resolve(true);
-            })
-            .catch((err) => {
-                console.error('获取麦克风权限失败:', err);
-                // 失败时重置状态
-                state.isRecording = false;
-                // 捕获错误，解析Promise为false（或使用reject，但这里更适合返回布尔值）
-                resolve(false);
-                // 如果希望外部用try/catch捕获错误，可以使用：
-                // reject(err);
-            });
-    });
-}
+        // 收集录音数据
+        mediaRecorder.ondataavailable = (e) => {
+            e.data.size && state.audioChunks.push(e.data);
+        };
 
-// 停止录音（重构为返回Promise，确保数据处理完成）
-async function stopRecording(): Promise<boolean> {
-    if (!state.isRecording || !state.mediaRecorder) {
+        mediaRecorder.start();
+        return true;
+    } catch (err) {
+        console.error('获取麦克风权限失败:', err);
+        state.isRecording = false;
         return false;
     }
+}
 
-    // 返回Promise，等待MediaRecorder真正停止并处理完数据
-    return new Promise((resolve) => {
-        // 监听录音器停止事件（确保数据收集完成）
+// 停止录音
+async function stopRecording(): Promise<boolean> {
+    // 非录音状态直接返回
+    if (!state.isRecording || !state.mediaRecorder) return false;
+
+    return new Promise(resolve => {
+        // 录音停止后处理
         state.mediaRecorder!.onstop = () => {
-            // 停止媒体流（释放麦克风）
-            if (state.stream) {
-                state.stream.getTracks().forEach(track => track.stop());
-                state.stream = null;
-            }
-            // 更新状态
+            // 释放媒体流
+            state.stream?.getTracks().forEach(track => track.stop());
+
+            // 重置状态
             state.isRecording = false;
             state.mediaRecorder = null;
-            // 通知等待的语句，继续执行
-            resolve(true); // 停止成功
+            state.stream = null;
+            resolve(true);
         };
-        // 执行停止录音（触发onstop事件）
+
+        // 执行停止操作
         state.mediaRecorder!.stop();
     });
 }
 
-// 鼠标按下：开始录音（修复异步处理）
+// 鼠标按下 - 开始录音
 elements.holdRecord?.addEventListener('mousedown', async (e) => {
-    // 只响应左键点击
-    if (e.button !== 0) return;
+    if (e.button !== 0) return; // 只响应左键
 
-    // 切换图标（添加可选链防止null错误）
-    elements.microphone?.classList.remove('fa-microphone-slash');
-    elements.microphone?.classList.add('fa-microphone');
+    // 更新图标
+    elements.microphone?.classList.replace('fa-microphone-slash', 'fa-microphone');
 
-    // 关键修复：用await获取startRecording的结果（异步函数必须等待）
-    const isStarted = await startRecording();
-    if (!isStarted) {
-        // 录音启动失败时重置图标
-        elements.microphone?.classList.remove('fa-microphone');
-        elements.microphone?.classList.add('fa-microphone-slash');
+    // 启动录音并处理失败情况
+    if (!await startRecording()) {
+        elements.microphone?.classList.replace('fa-microphone', 'fa-microphone-slash');
         console.log('开始录音失败');
     }
 });
 
-// 处理鼠标松开统一逻辑
+// 处理录音停止统一逻辑
 async function handleMouseRelease() {
-    if (state.isRecording) {
-        // 切换图标（添加可选链）
-        elements.microphone?.classList.remove('fa-microphone');
-        elements.microphone?.classList.add('fa-microphone-slash');
+    if (!state.isRecording) return false;
 
-        // 等待录音真正停止（依赖重构后的stopRecording返回Promise）
-        return await stopRecording();
+    // 更新图标
+    elements.microphone?.classList.replace('fa-microphone', 'fa-microphone-slash');
+
+    // 停止录音
+    const stopped = await stopRecording();
+    if (stopped && state.audioChunks.length) {
+        await sendVideo(); // 有数据则发送
+    } else {
+        console.log('无录音数据或停止失败');
     }
-    return false;
+    return stopped;
 }
 
-// 鼠标松开：停止录音并发送
-elements.holdRecord?.addEventListener('mouseup', async () => {
-    const isRecordingStopped = await handleMouseRelease();
-    if (isRecordingStopped) {
-        // 确认录音已停止且有数据，再发送
-        if (state.audioChunks.length > 0) {
-            await sendVideo();
-        } else {
-            console.log('无录音数据，不发送');
-        }
-    }
-});
-
+// 鼠标松开 - 停止录音
+elements.holdRecord?.addEventListener('mouseup', handleMouseRelease);
 
 ws.onmessage = async (event: MessageEvent) => {
 
@@ -210,32 +183,44 @@ ws.onmessage = async (event: MessageEvent) => {
         } else if (data.message_type === MessageType.TEXT) {
             try {
                 const currentUser = elements.usernameInput.value;
-                const msgClass = data.username === currentUser ? 'user-msg' : 'other-msg';
+                const isCurrentUser = data.username === currentUser;
+                const msgClass = isCurrentUser ? 'user-msg' : 'other-msg';
 
-                if (msgClass === 'user-msg') {
-                    const formattedMessage = `${data.message}${Arrows.left}`;
-                    elements.messagesContainer.innerHTML += `
-                          <div class="msg ${msgClass}">
-                              <span class="content">${formattedMessage}</span>
-                              <span class="user">${data.username}</span>
-                          </div>
-                          `;
+                // 创建消息容器div
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `msg ${msgClass}`;
+
+                // 创建用户名span
+                const userSpan = document.createElement('span');
+                userSpan.className = 'user';
+                userSpan.textContent = data.username;
+
+                // 创建内容span
+                const contentSpan = document.createElement('span');
+                contentSpan.className = 'content';
+                // 根据是否为当前用户设置不同的箭头方向
+                contentSpan.textContent = isCurrentUser
+                    ? `${data.message}${Arrows.left}`
+                    : `${Arrows.right}${data.message}`;
+
+                // 根据用户类型调整元素顺序
+                if (isCurrentUser) {
+                    msgDiv.appendChild(contentSpan);
+                    msgDiv.appendChild(userSpan);
                 } else {
-                    const formattedMessage = `${Arrows.right}${data.message}`;
-                    elements.messagesContainer.innerHTML += `
-                          <div class="msg ${msgClass}">
-                              <span class="user">${data.username}</span>
-                              <span class="content">${formattedMessage}</span>
-                          </div>
-                          `;
+                    msgDiv.appendChild(userSpan);
+                    msgDiv.appendChild(contentSpan);
                 }
+                // 用appendChild添加新消息（不会影响已有元素）
+                elements.messagesContainer.appendChild(msgDiv);
                 // 滚动到底部
+                elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
 
             } catch (error) {
                 console.error('解析消息失败:', error);
             }
         } else {
-            console.log('errr')
+            console.log('未处理的消息类型');
         }
     } catch (err) {
         console.error('处理消息失败:', err);
@@ -307,8 +292,6 @@ function createVoiceMessage(audioUrl: string, senderName: string): HTMLDivElemen
     // 创建发送者信息
     const senderInfo: HTMLDivElement = document.createElement('div');
     senderInfo.className = 'message-sender';
-
-
     // 创建自定义音频播放器容器
     const audioContainer: HTMLDivElement = document.createElement('div');
     audioContainer.className = 'custom-audio-player';
@@ -316,14 +299,33 @@ function createVoiceMessage(audioUrl: string, senderName: string): HTMLDivElemen
     playButton.className = 'audio-play-btn';
     // 创建播放/暂停按钮
     playButton.innerHTML = '<i class="fas fa-play"></i>'; // 使用FontAwesome图标
-    // 播放/暂停功能
+// 添加点击事件处理 - 控制音频播放/暂停
     playButton.addEventListener('click', function () {
         if (audioElement.paused) {
-            audioElement.play().catch(error => {
-                console.error('播放失败:', error);
+            // 暂停其他可能正在播放的音频
+            document.querySelectorAll('audio').forEach(otherAudio => {
+                if (otherAudio !== audioElement && !otherAudio.paused) {
+                    otherAudio.pause();
+                    // 更新其他音频的播放按钮状态
+                    const otherButton = otherAudio.parentNode?.querySelector('.audio-play-btn');
+                    if (otherButton) {
+                        otherButton.innerHTML = '<i class="fas fa-play"></i>';
+
+                    }
+                }
             });
-            playButton.innerHTML = '<i class="fas fa-pause"></i>';
+
+            // 播放当前音频
+            audioElement.play()
+                .then(() => {
+                    playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                })
+                .catch(error => {
+                    console.error('播放失败:', error);
+                    alert('无法播放音频，请检查权限或文件是否存在');
+                });
         } else {
+            // 暂停当前音频
             audioElement.pause();
             playButton.innerHTML = '<i class="fas fa-play"></i>';
         }
@@ -333,9 +335,9 @@ function createVoiceMessage(audioUrl: string, senderName: string): HTMLDivElemen
         playButton.innerHTML = '<i class="fas fa-play"></i>';
     });
     if (senderName === elements.usernameInput.value.trim()) {
+        console.log('right')
         senderInfo.textContent = `${audioElement.dataset.time} ${senderName}`;
         messageElement.className = 'voice-message right';
-
         // 音频播放结束时恢复按钮状态
         audioElement.addEventListener('ended', function () {
             playButton.innerHTML = '<i class="fas fa-play"></i>';
@@ -346,6 +348,7 @@ function createVoiceMessage(audioUrl: string, senderName: string): HTMLDivElemen
         messageElement.appendChild(audioContainer);
         messageElement.appendChild(senderInfo);
     } else {
+        console.log('left')
         messageElement.className = 'voice-message left';
         // 创建播放/暂停按钮
         senderInfo.textContent = `${senderName} ${audioElement.dataset.time}`;

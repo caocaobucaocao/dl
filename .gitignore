@@ -37,6 +37,7 @@ staticfiles/  # 收集的静态文件
 /media/*.gif
 */js/*
 *.js
+*js
 # 前端相关
 /node_modules/
 

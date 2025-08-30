@@ -1,12 +1,15 @@
+from django.db.models import Case, When, Value, CharField
+from django.db.models.functions import Concat
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
-from datetime import date
+from datetime import date, datetime, timedelta
 from django.db import models
 from django.utils import timezone
 import uuid
+
 
 class User(AbstractUser):
     """自定义用户模型"""
@@ -126,9 +129,6 @@ def save_user_profile(sender, instance, **kwargs):
     instance.user2profile.save()
 
 
-
-
-
 class SiteVisit(models.Model):
     """网站访问数据模型，记录用户访问行为"""
 
@@ -236,6 +236,35 @@ class SiteVisit(models.Model):
         null=True,
         help_text="已登录用户（未登录为null）"
     )
+
+    @classmethod
+    def active_visitor(cls, days=1, condition=None):
+        """
+        用Q对象支持复杂条件的活跃访客统计
+
+        参数:
+            days: 时间范围（天）
+            condition: Q对象，定义活跃条件（如Q(duration__gt=60)）
+        """
+        # 时间范围
+        end_time = timezone.now()
+        start_time = end_time - timedelta(days=days)
+
+        # 基础查询（时间范围）
+        # __gte  __lte：是
+        # Django ORM 的 “查询谓词”（可以理解为 “条件运算符”）：
+        # __gte：全称 “greater than or equal”，表示 “大于或等于”。
+        # __lte：全称 “less than or equal”，表示 “小于或等于”。
+        query = cls.objects.filter(
+            visit_time__gte=start_time,
+            visit_time__lte=end_time
+        )
+
+        # 应用Q对象条件（如果有）
+        if condition is not None:
+            query = query.filter(condition).order_by('-visit_time')
+
+        return query
 
     class Meta:
         ordering = ['-visit_time']

@@ -191,7 +191,7 @@ LOGGING = {
             'filename': os.path.join(LOG_DIR, 'db.log'),
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
-            'formatter': 'simple',
+            'formatter': 'sql',
             'encoding': 'utf-8',
         },
         # 控制台输出
@@ -199,7 +199,8 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'simple',
+
         },
         # 普通日志文件
         'file': {
@@ -209,6 +210,7 @@ LOGGING = {
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
         # 错误日志按日期轮转
         'error_file': {
@@ -219,6 +221,7 @@ LOGGING = {
             'interval': 1,
             'backupCount': 30,  # 保留30天的日志
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
         # 生产环境邮件通知错误
         'mail_admins': {
@@ -232,13 +235,13 @@ LOGGING = {
     'loggers': {
         # Django 自身的日志
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': False,
         },
         # 应用程序的日志
         'zhuye': {  # 替换为你的应用名
-            'handlers': ['console', 'file', 'error_file', 'mail_admins'],
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },

@@ -9,4 +9,5 @@ urlpatterns = [
     path('uprofile/', UProfileView.as_view(), name='uprofile'),  # 用户档案视图
     path('user/<int:userid>', tests, name='user'),
     path('user/<int:userid>', profile, name='profile'),
+    path('data_analysis/', data_analysis, name='data_analysis'),
 ]

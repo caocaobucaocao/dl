@@ -1,0 +1,17 @@
+{% extends "zhuye/index.html" %} {% load static %} {% block title %}数据{% endblock %} {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'zhuye/data_analysis.css' %}"/>
+    {{ block.super }}
+{% endblock %}
+{% block content %}
+    <h1 class="page-title ">数据分析</h1>
+    {{ div|safe }}  <!-- Bokeh 生成的图表容器 -->
+{% endblock %}
+{% block js %}
+    {{ block.super }}
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.8.0.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.8.0.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.8.0.min.js"></script>
+    {{ script|safe }}
+    <!-- 引用编译后的 JavaScript 文件 -->
+    <script src="{% static 'js/zhuye/data_analysis.js' %}"></script>
+{% endblock %}

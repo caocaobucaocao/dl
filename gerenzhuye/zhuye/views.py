@@ -1,6 +1,8 @@
 import json
-from threading import active_count
 
+import numpy as np
+from bokeh.embed import components
+from bokeh.plotting import figure
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -14,7 +16,21 @@ from django.utils.decorators import method_decorator
 from .forms import *
 from .models import *
 from django.http import HttpResponseRedirect, HttpResponse
-from gerenzhuye.decorators import log_execution
+from gerenzhuye.decorators import log_execution, logger
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
+
+
+def get_real_ip(request):
+    """获取用户真实IP（原有逻辑不变）"""
+    ip_headers = ['HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'REMOTE_ADDR']
+    for header in ip_headers:
+        ip = request.META.get(header)
+        if ip:
+            if header == 'HTTP_X_FORWARDED_FOR':
+                ip = ip.split(',')[0].strip()
+            return ip
+    return '未知IP'
 
 
 @log_execution()
@@ -135,6 +151,67 @@ def profile(request, userid):  # 注意这里接收userid参数
         )
 
 
+# @csrf_protect
+# def record_stay_duration(request):
+#     if request.method == 'POST':
+#         user_token = request.COOKIES.get('csrftoken')
+#         ip_address = get_real_ip(request)
+#         data = json.loads(request.body)
+#         logger.info(data)
+#         duration = data.get('duration', 0)
+#         url = data.get('url', '')
+#
+#         # 此处可关联到对应的SiteVisit记录，更新duration字段
+#         # 例如：通过url和用户信息找到对应记录并更新
+#         try:
+#             if request.user.is_authenticated:
+#                 visit = SiteVisit.objects.create(
+#                     user=request.user,
+#                     url=url,
+#                     duration=duration,
+#                     ip_address=ip_address
+#                 )
+#             else:
+#                 visit = SiteVisit.objects.create(
+#                     token=user_token,
+#                     url=url,
+#                     duration=duration,
+#                     ip_address=ip_address
+#                 )
+#             visit.save()
+#         except Exception as e:
+#             logger.error(f"更新停留时长失败：{str(e)}")
+#         return JsonResponse({'status': 'success'})
+#     return JsonResponse({'status': 'error'}, status=400)
+
+
 def data_analysis(request):
     template_name = 'zhuye/data_analysis.html'
-    return render(request, template_name )
+    x = np.linspace(0, 10, 100)
+    y1 = np.sin(x)
+    y2 = np.cos(x)
+
+    # 2. 创建 Bokeh 图表
+    plot = figure(
+        title="正弦和余弦曲线",
+        x_axis_label="X轴",
+        y_axis_label="Y轴",
+        width=800,
+        height=600,
+        sizing_mode="stretch_both",  # 自适应容器大小
+        tools="pan,box_zoom,wheel_zoom,reset,hover"  # 交互式工具
+    )
+
+    # 添加曲线
+    plot.line(x, y1, legend_label="sin(x)", line_width=2, color="blue")
+    plot.line(x, y2, legend_label="cos(x)", line_width=2, color="red", line_dash="dashed")
+
+    # 3. 将图表转换为可嵌入网页的组件
+    script, div = components(plot)
+
+    # 4. 传递到模板
+    return render(request, template_name, {
+        'script': script,
+        'div': div,
+        'title': 'Bokeh 与 Django 集成示例'
+    })

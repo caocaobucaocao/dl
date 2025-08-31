@@ -139,7 +139,7 @@ class SiteVisit(models.Model):
         editable=False,
         help_text="访问记录唯一ID"
     )
-
+    token = models.CharField(max_length=36, null=True, blank=True)  # 非登录用户标识（UUID）
     # 访问时间
     visit_time = models.DateTimeField(
         default=timezone.now,
@@ -175,7 +175,7 @@ class SiteVisit(models.Model):
     # 访问时长（秒）
     duration = models.PositiveIntegerField(
         default=0,
-        help_text="用户在页面的停留时间（秒）"
+        help_text="用户在页面的停留时间（秒）,0代表,"
     )
 
     # 设备类型

@@ -1,5 +1,7 @@
 console.log('this ts')
 document.addEventListener('DOMContentLoaded', function () {
+
+    console.log('index DOMContentLoaded');
     // 确保DOM加载完成后再获取元素
     const avatarInput = document.querySelector('input[name="avatar"]') as HTMLInputElement | null;
     // 明确指定为HTMLImageElement类型
@@ -7,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
         || document.querySelector('.default-avatar') as HTMLImageElement | null;
 
     if (avatarInput && previewImg) {
-        console.log('元素加载成功');
 
         avatarInput.addEventListener('change', function (e) {
             console.log('change事件触发');

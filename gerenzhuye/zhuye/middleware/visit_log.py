@@ -4,6 +4,8 @@ import user_agents
 from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
+
+from gerenzhuye.decorators import logger
 from ..models import SiteVisit
 
 
@@ -79,8 +81,9 @@ def get_request_params(request):
 
 def record_visit(request, response):
     # 跳过不需要记录的请求
-    exclude_paths = [ reverse('rgst'), reverse('login'), reverse('logout')]
-    for e in ['/admin/', '/static/', '/media/',]:
+    # reverse('record_stay_duration')
+    exclude_paths = [reverse('rgst'), reverse('login'), reverse('logout'), ]
+    for e in ['/admin/', '/static/', '/media/', ]:
         exclude_paths.append(e)
     if any(request.path.startswith(path) for path in exclude_paths):
         return
@@ -93,6 +96,7 @@ def record_visit(request, response):
     # --------------------------
     # 原有逻辑保持不变（访问时间、IP、User-Agent等）
     # --------------------------
+    user_token = request.COOKIES.get('csrftoken')  # 对应前端设置的 cookie 键名
     visit_time = timezone.now()
     url = request.path
     referrer = request.META.get('HTTP_REFERER', '') or None
@@ -126,6 +130,7 @@ def record_visit(request, response):
     # --------------------------
     try:
         SiteVisit.objects.create(
+            token=user_token,
             visit_time=visit_time,
             url=url,
             referrer=referrer,
@@ -143,8 +148,6 @@ def record_visit(request, response):
     except Exception as e:
         if settings.DEBUG:
             print(f"记录访问失败：{str(e)}")
-        import logging
-        logger = logging.getLogger('zhuye')
         logger.error(f"自动记录访问失败：{str(e)}", exc_info=True)
 
 
@@ -157,5 +160,21 @@ class SiteVisitMiddleware:
     def __call__(self, request):
         request.start_time = timezone.now()
         response = self.get_response(request)
-        record_visit(request, response)
+        # 验证用户标识（登录用户或携带token的非登录用户）
+        has_valid_identifier = False
+        # 1. 登录用户：通过user标识
+        if request.user.is_authenticated:
+            has_valid_identifier = True
+
+        # 2. 非登录用户：通过cookie中的anon_user_token标识
+        else:
+            user_token = request.COOKIES.get('csrftoken')
+            if user_token:  # 确保token存在（非空）
+                has_valid_identifier = True
+        # 仅当有有效标识时，才记录访问
+        if has_valid_identifier:
+            record_visit(request, response)
+        else:
+            # 可选：记录无标识的访问尝试（用于调试）
+            logger.debug(f"跳过无标识的访问记录：{request.path}")
         return response

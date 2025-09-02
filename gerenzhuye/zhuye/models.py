@@ -1,5 +1,3 @@
-from django.db.models import Case, When, Value, CharField
-from django.db.models.functions import Concat
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse

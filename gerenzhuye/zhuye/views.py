@@ -1,14 +1,14 @@
 import json
 
-import numpy as np
 from bokeh.embed import components
+from bokeh.models import DatetimeTickFormatter, FactorRange, HoverTool
 from bokeh.plotting import figure
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView, ListView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
@@ -17,8 +17,6 @@ from .forms import *
 from .models import *
 from django.http import HttpResponseRedirect, HttpResponse
 from gerenzhuye.decorators import log_execution, logger
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_protect
 
 
 def get_real_ip(request):
@@ -151,63 +149,84 @@ def profile(request, userid):  # 注意这里接收userid参数
         )
 
 
-# @csrf_protect
-# def record_stay_duration(request):
-#     if request.method == 'POST':
-#         user_token = request.COOKIES.get('csrftoken')
-#         ip_address = get_real_ip(request)
-#         data = json.loads(request.body)
-#         logger.info(data)
-#         duration = data.get('duration', 0)
-#         url = data.get('url', '')
-#
-#         # 此处可关联到对应的SiteVisit记录，更新duration字段
-#         # 例如：通过url和用户信息找到对应记录并更新
-#         try:
-#             if request.user.is_authenticated:
-#                 visit = SiteVisit.objects.create(
-#                     user=request.user,
-#                     url=url,
-#                     duration=duration,
-#                     ip_address=ip_address
-#                 )
-#             else:
-#                 visit = SiteVisit.objects.create(
-#                     token=user_token,
-#                     url=url,
-#                     duration=duration,
-#                     ip_address=ip_address
-#                 )
-#             visit.save()
-#         except Exception as e:
-#             logger.error(f"更新停留时长失败：{str(e)}")
-#         return JsonResponse({'status': 'success'})
-#     return JsonResponse({'status': 'error'}, status=400)
-
-
+@log_execution()
 def data_analysis(request):
     template_name = 'zhuye/data_analysis.html'
-    x = np.linspace(0, 10, 100)
-    y1 = np.sin(x)
-    y2 = np.cos(x)
+    token = request.GET.get('token')
+    logger.debug(f"分析 token: {token}")
 
-    # 2. 创建 Bokeh 图表
+    # 1. 查询数据（保留原始关联关系，不提前去重）
+    qs = SiteVisit.objects.filter(token=token).values_list('url', 'visit_time')[:100]
+    if not qs:
+        return render(request, template_name, {
+            'script': '',
+            'div': '<p class="text-center text-gray-500">暂无访问记录</p>',
+            'title': '访问分析'
+        })
+
+    # 2. 提取数据（保留 URL 和时间的一一对应关系，不单独去重）
+    # 格式：[(url1, time1), (url2, time2), ...]
+    raw_data = list(qs)
+    # 按时间排序（折线图需要按时间顺序连接，否则线条混乱）
+    raw_data_sorted = sorted(raw_data, key=lambda x: x[1])  # 按时间升序
+
+    # 拆分排序后的 x（时间）和 y（URL），确保长度一致
+    visit_time_list = [item[1] for item in raw_data_sorted]  # x轴：时间（长度 N）
+    visit_url_list = [item[0] for item in raw_data_sorted]  # y轴：URL（长度 N）
+
+    # 3. 提取唯一 URL 作为分类轴（确保 FactorRange 无重复）
+    unique_urls = list(dict.fromkeys(visit_url_list))  # 唯一 URL 列表（去重）
+    y_range = FactorRange(factors=unique_urls)  # 分类轴范围（唯一 URL）
+
+    logger.debug(f"排序后时间列表长度: {len(visit_time_list)}")
+    logger.debug(f"排序后URL列表长度: {len(visit_url_list)}")  # 与时间列表长度一致
+
+    # 4. 创建图表（折线图）
     plot = figure(
-        title="正弦和余弦曲线",
-        x_axis_label="X轴",
-        y_axis_label="Y轴",
+        title="访问记录时间线（折线图）",
+        x_axis_label="访问时间",
+        y_axis_label="访问页面",
         width=800,
         height=600,
-        sizing_mode="stretch_both",  # 自适应容器大小
-        tools="pan,box_zoom,wheel_zoom,reset,hover"  # 交互式工具
+        sizing_mode="stretch_both",
+        tools="pan,box_zoom,wheel_zoom,reset,hover",
+        x_axis_type="datetime",  # x轴：时间轴
+        y_range=y_range  # y轴：分类轴（唯一 URL）
     )
 
-    # 添加曲线
-    plot.line(x, y1, legend_label="sin(x)", line_width=2, color="blue")
-    plot.line(x, y2, legend_label="cos(x)", line_width=2, color="red", line_dash="dashed")
+    # 5. 绘制折线图（使用排序后的数据，确保线条按时间顺序连接）
+    plot.line(
+        x=visit_time_list,
+        y=visit_url_list,
+        line_width=2,  # 线条粗细
+        color="blue",
+        legend_label="访问顺序",
+    )
 
-    # 3. 将图表转换为可嵌入网页的组件
+    # 6. 添加悬停工具（显示详细信息）
+    hover = plot.select(type=HoverTool)
+    hover.tooltips = [
+        ("访问时间", "@x{%Y-%m-%d %H:%M}"),
+        ("访问页面", "@y")
+    ]
+    hover.formatters = {"@x": "datetime"}  # 时间格式化
+
+    # 7. 格式化 x 轴时间显示
+    plot.xaxis.formatter = DatetimeTickFormatter(
+        hours="%H:%M",
+        days="%Y-%m-%d",
+        months="%Y-%m",
+        years="%Y"
+    )
+
+    # 8. 转换为网页组件
     script, div = components(plot)
+
+    return render(request, template_name, {
+        'script': script,
+        'div': div,
+        'title': '访问记录分析（折线图）'
+    })
 
     # 4. 传递到模板
     return render(request, template_name, {
@@ -215,3 +234,21 @@ def data_analysis(request):
         'div': div,
         'title': 'Bokeh 与 Django 集成示例'
     })
+
+
+# books/views.py
+class SiteVisitListView(ListView):
+    model = SiteVisit
+    template_name = 'zhuye/svlvh.html'
+    context_object_name = "site_visits"
+    paginate_by = 20  # 每页5条
+    paginate_orphans = 2  # 最后一页若≤2条，合并到上一页
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # 从URL查询参数中获取作者名（如 /zhuye/?url=/zhuye/index/）
+        url = self.request.GET.get("url") or ''
+        if url:
+            queryset = queryset.filter(url=url)  # 模糊匹配
+            logger.debug(queryset.count())
+        return queryset

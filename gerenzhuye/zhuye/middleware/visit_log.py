@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from gerenzhuye.decorators import logger
+from gerenzhuye.settings import TOKEN_NAME
 from ..models import SiteVisit
 
 
@@ -79,7 +80,7 @@ def get_request_params(request):
     return params if params else None
 
 
-def record_visit(request, response):
+def record_visit(request):
     # 跳过不需要记录的请求
     # reverse('record_stay_duration')
     exclude_paths = [reverse('rgst'), reverse('login'), reverse('logout'), ]
@@ -96,7 +97,7 @@ def record_visit(request, response):
     # --------------------------
     # 原有逻辑保持不变（访问时间、IP、User-Agent等）
     # --------------------------
-    user_token = request.COOKIES.get('csrftoken')  # 对应前端设置的 cookie 键名
+    user_token = request.COOKIES.get(TOKEN_NAME)  # 对应前端设置的 cookie 键名
     visit_time = timezone.now()
     url = request.path
     referrer = request.META.get('HTTP_REFERER', '') or None
@@ -117,11 +118,6 @@ def record_visit(request, response):
             device_type = 'desktop'
         browser = f"{user_agent.browser.family} {user_agent.browser.version_string}"
         os = f"{user_agent.os.family} {user_agent.os.version_string}"
-
-    # 计算访问时长（原有逻辑）
-    duration = int((visit_time - request.start_time).total_seconds())
-    duration = max(duration, 0)
-
     # 关联已登录用户（原有逻辑）
     user = request.user if request.user.is_authenticated else None
 
@@ -136,7 +132,6 @@ def record_visit(request, response):
             referrer=referrer,
             ip_address=ip_address,
             user_agent=user_agent_str,
-            duration=duration,
             device_type=device_type,
             browser=browser,
             os=os,
@@ -168,13 +163,14 @@ class SiteVisitMiddleware:
 
         # 2. 非登录用户：通过cookie中的anon_user_token标识
         else:
-            user_token = request.COOKIES.get('csrftoken')
+            user_token = request.COOKIES.get(TOKEN_NAME)
             if user_token:  # 确保token存在（非空）
                 has_valid_identifier = True
         # 仅当有有效标识时，才记录访问
         if has_valid_identifier:
-            record_visit(request, response)
+            record_visit(request)
         else:
             # 可选：记录无标识的访问尝试（用于调试）
             logger.debug(f"跳过无标识的访问记录：{request.path}")
+
         return response

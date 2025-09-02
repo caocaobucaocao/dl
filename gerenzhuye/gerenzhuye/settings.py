@@ -150,7 +150,8 @@ UN_EMAIL = 'anonymous @ example.com'
 # 媒体文件配置（用户上传的头像等动态资源）
 MEDIA_URL = '/media/'  # 媒体文件访问URL前缀
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 媒体文件存储目录（单独创建media文件夹）
-
+# tokenname
+TOKEN_NAME="csrftoken"
 # 确保日志目录存在
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_DIR):

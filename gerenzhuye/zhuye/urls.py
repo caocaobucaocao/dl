@@ -11,4 +11,6 @@ urlpatterns = [
     path('user/<int:userid>', profile, name='profile'),
     # path('record_stay_duration/', record_stay_duration, name='record_stay_duration'),
     path('data_analysis/', data_analysis, name='data_analysis'),
+
+    path('svlv/', SiteVisitListView.as_view(), name='svlv'),
 ]

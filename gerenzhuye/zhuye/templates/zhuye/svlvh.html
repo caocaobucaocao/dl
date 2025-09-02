@@ -1,0 +1,52 @@
+<!-- templates/zhuye/svlvh.html -->
+{% extends 'zhuye/index.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'zhuye/svlvh.css' %}"/>
+{% endblock %}
+{% block title %}
+    访问列表
+{% endblock %}
+{% block content %}
+    <h1 class="page-title">{{ request.GET.url }}</h1>
+    <table>
+        <tr>
+            <th>来源</th>
+            <th>访问时间</th>
+            <th>用户</th>
+        </tr>
+        {% for item in site_visits %}
+            <tr>
+                <td>{{ item.referrer }}</td>
+                <td>{{ item.visit_time }}</td>
+                {% if item.username %}
+                    <td>
+                        <a href="{% url 'data_analysis' %}?username={{ item.user.username }}">{{ item.user.username }}</a>
+                    </td>
+                {% else %}
+                    <td><a href="{% url 'data_analysis' %}?token={{ item.token }}">{{ item.token }}</a></td>
+                {% endif %}
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">暂无书籍数据</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <!-- 分页控件 -->
+    {% if is_paginated %}
+        <div style="text-align: center; margin: 20px;">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">首页</a>
+                <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+            {% endif %}
+
+            <span>第 {{ page_obj.number }} 页，共 {{ page_obj.paginator.num_pages }} 页</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">尾页</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

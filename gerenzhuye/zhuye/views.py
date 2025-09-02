@@ -91,8 +91,8 @@ class UProfileView(View):
             uprofile = request.user.user2profile
         except Uprofile.DoesNotExist:
             uprofile = None
-        uprofileForm = ProfileForm(instance=uprofile, user=request.user)
-        return render(request, self.template_name, {'form': uprofileForm})
+        uprofile_form = ProfileForm(instance=uprofile, user=request.user)
+        return render(request, self.template_name, {'form': uprofile_form})
 
     def post(self, request):
         print(1)
@@ -153,10 +153,10 @@ def profile(request, userid):  # 注意这里接收userid参数
 def data_analysis(request):
     template_name = 'zhuye/data_analysis.html'
     token = request.GET.get('token')
-    logger.debug(f"分析 token: {token}")
+    logger.debug(f"token: {token}")
 
     # 1. 查询数据（保留原始关联关系，不提前去重）
-    qs = SiteVisit.objects.filter(token=token).values_list('url', 'visit_time')[:100]
+    qs = SiteVisit.objects.filter(token=token).values_list('url', 'visit_time')[:1200]
     if not qs:
         return render(request, template_name, {
             'script': '',
@@ -180,7 +180,7 @@ def data_analysis(request):
 
     logger.debug(f"排序后时间列表长度: {len(visit_time_list)}")
     logger.debug(f"排序后URL列表长度: {len(visit_url_list)}")  # 与时间列表长度一致
-
+    logger.debug(f"去重URL列表长度: {len(unique_urls)}")
     # 4. 创建图表（折线图）
     plot = figure(
         title="访问记录时间线（折线图）",
@@ -226,13 +226,6 @@ def data_analysis(request):
         'script': script,
         'div': div,
         'title': '访问记录分析（折线图）'
-    })
-
-    # 4. 传递到模板
-    return render(request, template_name, {
-        'script': script,
-        'div': div,
-        'title': 'Bokeh 与 Django 集成示例'
     })
 
 

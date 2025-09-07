@@ -2,6 +2,7 @@ import json
 
 from bokeh.embed import components
 from bokeh.models import DatetimeTickFormatter, FactorRange, HoverTool
+from bokeh.models.tools import PanTool, BoxZoomTool, WheelZoomTool, ResetTool
 from bokeh.plotting import figure
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,7 +37,7 @@ def index(request):
     """首页视图"""
     site_visits_count = SiteVisit.objects.all().count()
     today_visits_count = SiteVisit.active_visitor().count()
-    condition = Q(duration__gt=60) | Q(url__contains="/zhuye/index/")
+    condition = Q() | Q(url__contains="/zhuye/index/")
     active_visits_count = SiteVisit.active_visitor(condition=condition).count()
     return render(request, 'zhuye/index.html', {'count': site_visits_count, 'today_visits_count': today_visits_count,
                                                 'active_visits_count': active_visits_count})
@@ -153,17 +154,26 @@ def profile(request, userid):  # 注意这里接收userid参数
 def data_analysis(request):
     template_name = 'zhuye/data_analysis.html'
     token = request.GET.get('token')
+    username = request.GET.get('username')
     logger.debug(f"token: {token}")
-
-    # 1. 查询数据（保留原始关联关系，不提前去重）
-    qs = SiteVisit.objects.filter(token=token).values_list('url', 'visit_time')[:1200]
+    logger.debug(f"username: {username}")
+    qs = ''
+    if token or username:
+        if token:
+            qs = SiteVisit.objects.filter(token=token).values_list('url', 'visit_time')[:1200]
+        if username:
+            user = User.objects.get(username=username) or ''
+            logger.debug(user)
+            if user: qs = SiteVisit.objects.filter(user=user).values_list('url', 'visit_time')[:1200]
+            logger.debug(qs)
+    else:
+        qs = ''
     if not qs:
         return render(request, template_name, {
             'script': '',
             'div': '<p class="text-center text-gray-500">暂无访问记录</p>',
             'title': '访问分析'
         })
-
     # 2. 提取数据（保留 URL 和时间的一一对应关系，不单独去重）
     # 格式：[(url1, time1), (url2, time2), ...]
     raw_data = list(qs)
@@ -181,6 +191,16 @@ def data_analysis(request):
     logger.debug(f"排序后时间列表长度: {len(visit_time_list)}")
     logger.debug(f"排序后URL列表长度: {len(visit_url_list)}")  # 与时间列表长度一致
     logger.debug(f"去重URL列表长度: {len(unique_urls)}")
+    # 定义各工具的中文配置（使用 description 设置工具按钮的悬停提示）
+    pan_tool = PanTool(description="平移")  # 平移工具
+    wheel_zoom_tool = WheelZoomTool(description="滚轮缩放")  # 滚轮缩放工具
+    reset_tool = ResetTool(description="重置视图")  # 重置工具
+    hover_tool = HoverTool(
+        description="悬停查看详情",  # 工具按钮的提示
+        tooltips=[("访问时间", "@x{%Y-%m-%d %H:%M}"),
+                  ("访问页面", "@y")],  # 悬停时显示的数据内容（示例）
+        formatters={"@x": "datetime"}  # 时间格式化
+    )
     # 4. 创建图表（折线图）
     plot = figure(
         title="访问记录时间线（折线图）",
@@ -189,7 +209,7 @@ def data_analysis(request):
         width=800,
         height=600,
         sizing_mode="stretch_both",
-        tools="pan,box_zoom,wheel_zoom,reset,hover",
+        tools=[pan_tool, wheel_zoom_tool, reset_tool, hover_tool],
         x_axis_type="datetime",  # x轴：时间轴
         y_range=y_range  # y轴：分类轴（唯一 URL）
     )
@@ -202,14 +222,6 @@ def data_analysis(request):
         color="blue",
         legend_label="访问顺序",
     )
-
-    # 6. 添加悬停工具（显示详细信息）
-    hover = plot.select(type=HoverTool)
-    hover.tooltips = [
-        ("访问时间", "@x{%Y-%m-%d %H:%M}"),
-        ("访问页面", "@y")
-    ]
-    hover.formatters = {"@x": "datetime"}  # 时间格式化
 
     # 7. 格式化 x 轴时间显示
     plot.xaxis.formatter = DatetimeTickFormatter(

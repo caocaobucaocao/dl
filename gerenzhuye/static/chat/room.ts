@@ -1,6 +1,219 @@
+/**
+ * 基于Web Crypto API的加密服务
+ * 适配tsconfig: target=es2021, lib=[es2021, dom]
+ */
+class CryptoService {
+    private rsaKeyPair?: CryptoKeyPair;
+
+    /**
+     * 生成RSA密钥对（2048位，RSA-OAEP模式）
+     * 修复：为公私钥指定更精确的用途
+     */
+    async generateRSAKeyPair(): Promise<void> {
+        this.rsaKeyPair = await crypto.subtle.generateKey(
+            {
+                name: "RSA-OAEP",
+                modulusLength: 2048,
+                publicExponent: new Uint8Array([0x01, 0x00, 0x01]), // 65537
+                hash: "SHA-256"
+            },
+            true, // 允许提取密钥
+            ["encrypt", "decrypt"]  // 第3个参数：公钥用途和私钥用途的数组
+        );
+    }
+
+    /**
+     * 生成AES-256-GCM密钥
+     */
+    async generateAESKey(): Promise<CryptoKey> {
+        return crypto.subtle.generateKey(
+            {
+                name: "AES-GCM",
+                length: 256
+            },
+            true, // 允许提取密钥
+            ["encrypt", "decrypt"]
+        );
+    }
+
+    /**
+     * 导出RSA公钥（PEM格式）
+     */
+    async exportRSAPublicKey(): Promise<string> {
+        if (!this.rsaKeyPair) {
+            throw new Error("RSA密钥对未生成");
+        }
+
+        // 导出SPKI格式公钥
+        const publicKeyRaw = await crypto.subtle.exportKey(
+            "spki",
+            this.rsaKeyPair.publicKey
+        );
+
+        // 转换为PEM格式（添加适当的换行）
+        const publicKeyBytes = new Uint8Array(publicKeyRaw);
+        const base64 = btoa(String.fromCharCode(...publicKeyBytes));
+        // 每64个字符添加一个换行符，符合PEM格式规范
+        const formatted = base64.match(/.{1,64}/g)?.join('\n') || base64;
+        return `-----BEGIN PUBLIC KEY-----\n${formatted}\n-----END PUBLIC KEY-----`;
+    }
+
+    /**
+     * 用RSA公钥加密AES密钥
+     * @param aesKey 待加密的AES密钥
+     * @param publicKeyPem RSA公钥（PEM格式）
+     */
+    async encryptAESKeyWithRSA(aesKey: CryptoKey, publicKeyPem: string): Promise<string> {
+        // 导入RSA公钥
+        const publicKey = await this.importRSAPublicKey(publicKeyPem);
+
+        // 导出AES密钥原始字节
+        const aesKeyRaw = await crypto.subtle.exportKey("raw", aesKey);
+
+        // RSA加密AES密钥
+        const encrypted = await crypto.subtle.encrypt(
+            {name: "RSA-OAEP"},
+            publicKey,
+            aesKeyRaw
+        );
+
+        return btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+    }
+
+    /**
+     * 用RSA私钥解密AES密钥
+     * @param encryptedAesKey 加密后的AES密钥（Base64）
+     */
+    async decryptAESKeyWithRSA(encryptedAesKey: string): Promise<CryptoKey> {
+        if (!this.rsaKeyPair) {
+            throw new Error("RSA密钥对未生成");
+        }
+
+        // 解码Base64
+        const encryptedBytes = new Uint8Array(
+            atob(encryptedAesKey).split('').map(c => c.charCodeAt(0))
+        );
+
+        // RSA解密
+        const aesKeyRaw = await crypto.subtle.decrypt(
+            {name: "RSA-OAEP"},
+            this.rsaKeyPair.privateKey,
+            encryptedBytes
+        );
+
+        // 修复：导入AES密钥时允许加密和解密操作
+        return crypto.subtle.importKey(
+            "raw",
+            aesKeyRaw,
+            {name: "AES-GCM"},
+            false,
+            ["encrypt", "decrypt"]
+        );
+    }
+
+    /**
+     * 从PEM格式导入RSA公钥
+     */
+    private async importRSAPublicKey(pem: string): Promise<CryptoKey> {
+        const cleaned = pem.replace(/-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----|\n/g, '');
+        const binary = atob(cleaned);
+        const buffer = new ArrayBuffer(binary.length);
+        const view = new Uint8Array(buffer);
+
+        for (let i = 0; i < binary.length; i++) {
+            view[i] = binary.charCodeAt(i);
+        }
+
+        return crypto.subtle.importKey(
+            "spki",
+            buffer,
+            {name: "RSA-OAEP", hash: "SHA-256"},
+            false,
+            ["encrypt"]
+        );
+    }
+
+    /**
+     * 辅助方法：使用AES密钥加密数据
+     */
+    async encryptWithAES(aesKey: CryptoKey, data: string): Promise<{ ciphertext: string, iv: string }> {
+        const encoder = new TextEncoder();
+        const dataBuffer = encoder.encode(data);
+        const iv = crypto.getRandomValues(new Uint8Array(12)); // AES-GCM推荐12字节IV
+
+        const ciphertext = await crypto.subtle.encrypt(
+            {name: "AES-GCM", iv},
+            aesKey,
+            dataBuffer
+        );
+
+        return {
+            ciphertext: btoa(String.fromCharCode(...new Uint8Array(ciphertext))),
+            iv: btoa(String.fromCharCode(...iv))
+        };
+    }
+
+    /**
+     * 辅助方法：使用AES密钥解密数据
+     */
+    async decryptWithAES(aesKey: CryptoKey, ciphertext: string, iv: string): Promise<string> {
+        const decoder = new TextDecoder();
+        const ciphertextBuffer = new Uint8Array(
+            atob(ciphertext).split('').map(c => c.charCodeAt(0))
+        );
+        const ivBuffer = new Uint8Array(
+            atob(iv).split('').map(c => c.charCodeAt(0))
+        );
+
+        const plaintextBuffer = await crypto.subtle.decrypt(
+            {name: "AES-GCM", iv: ivBuffer},
+            aesKey,
+            ciphertextBuffer
+        );
+
+        return decoder.decode(plaintextBuffer);
+    }
+}
+
+// 假设 CryptoService 已定义且方法返回Promise
+async function initCrypto() {
+    try {
+        const cryptoService = new CryptoService();
+        // 1. 生成RSA密钥对（异步操作，需等待完成）
+        await cryptoService.generateRSAKeyPair();
+        console.log("RSA密钥对生成完成");
+        // 2. 生成AES密钥（异步操作）
+        const aesKey = await cryptoService.generateAESKey();
+        console.log("AES密钥生成完成");
+        // 3. 导出RSA公钥（依赖已生成的RSA密钥对，需等待）
+        const publicKeyPem = await cryptoService.exportRSAPublicKey();
+        console.log("RSA公钥:\n", publicKeyPem);
+        // 4. 加密AES密钥（依赖前两步的结果，需等待）
+        const encryptedAes = await cryptoService.encryptAESKeyWithRSA(aesKey, publicKeyPem);
+        console.log("加密后的AES密钥:", encryptedAes);
+
+        // 返回所有结果供后续使用
+        return {
+            cryptoService,
+            aesKey,
+            publicKeyPem,
+            encryptedAes
+        };
+    } catch (error) {
+        console.error("加密流程出错:", error);
+        throw error; // 向上传递错误，方便外层处理
+    }
+}
+
+let cryptoContext: { encryptedAes: any; cryptoService?: CryptoService; aesKey?: CryptoKey; publicKeyPem?: string; };
+// 在浏览器环境加载完成后执行测试
+if (typeof window !== "undefined") {
+    cryptoContext =  await initCrypto();
+}
 enum MessageType {
     TEXT = 'text',
-    VOICE = 'voice'
+    VOICE = 'voice',
+    KEY = 'key'
 }
 
 // 定义消息数据接口
@@ -61,6 +274,7 @@ const elements: ChatElements = {
 if (elements.roomNameInput && elements.usernameInput && elements.messagesContainer && elements.holdRecord && elements.textInput) {
     console.log('元素获取正常')
 }
+const username = elements.usernameInput.value.trim() || '访客';
 // 连接WebSocket
 const roomName = elements.roomNameInput.value;
 const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -182,8 +396,8 @@ ws.onmessage = async (event: MessageEvent) => {
             elements.messagesContainer.appendChild(voiceMessage);
         } else if (data.message_type === MessageType.TEXT) {
             try {
-                const currentUser = elements.usernameInput.value;
-                const isCurrentUser = data.username === currentUser;
+
+                const isCurrentUser = data.username === username;
                 const msgClass = isCurrentUser ? 'user-msg' : 'other-msg';
 
                 // 创建消息容器div
@@ -219,8 +433,10 @@ ws.onmessage = async (event: MessageEvent) => {
             } catch (error) {
                 console.error('解析消息失败:', error);
             }
+        } else if (data.message_type === MessageType.KEY) {
+            console.log('key', data);
         } else {
-            console.log('未处理的消息类型');
+            console.log('类型无法处理')
         }
     } catch (err) {
         console.error('处理消息失败:', err);
@@ -232,7 +448,6 @@ ws.onmessage = async (event: MessageEvent) => {
 function sendMsg(): void {
     console.log('sendMsg');
     const text = elements.textInput.value.trim();
-    const username = elements.usernameInput.value.trim() || '访客';
     if (text) {
         const messageData: MessageData = {
             username: username,
@@ -365,9 +580,17 @@ function createVoiceMessage(audioUrl: string, senderName: string): HTMLDivElemen
     return messageElement;
 }
 
+
 // WebSocket 连接事件
-ws.onopen = () => {
+ws.onopen = async () => {
     console.log('WebSocket 连接已建立');
+    // 示例：连接成功后发送初始消息（如用户加入通知）
+    const joinMessage: MessageData = {
+        username: username,
+        message_type: MessageType.KEY,
+        message: cryptoContext.encryptedAes, // 假设当前用户信息已定义
+    };
+    ws.send(JSON.stringify(joinMessage));
 };
 
 ws.onclose = (event) => {
@@ -378,3 +601,6 @@ ws.onclose = (event) => {
 ws.onerror = (error) => {
     console.error('WebSocket 错误:', error);
 };
+
+export { };
+

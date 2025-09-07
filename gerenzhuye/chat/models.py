@@ -21,7 +21,7 @@ class Chat(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user2chat')
     message = models.TextField()
     createdAt = models.DateTimeField(auto_now_add=True)
-    Room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room2chat')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room2chat')
 
     # 定义消息类型枚举
     class MessageType(models.TextChoices):

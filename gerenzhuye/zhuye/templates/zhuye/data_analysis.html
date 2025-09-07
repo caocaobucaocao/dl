@@ -3,7 +3,12 @@
     {{ block.super }}
 {% endblock %}
 {% block content %}
-    <h1 class="page-title ">数据分析</h1>
+    <h1 class="page-title ">{% if request.GET.username %}
+        {{ request.GET.username }}
+    {% elif  request.GET.token %}
+        {{ request.GET.token }}
+    {% endif %}
+    </h1>
     {{ div|safe }}  <!-- Bokeh 生成的图表容器 -->
 {% endblock %}
 {% block js %}

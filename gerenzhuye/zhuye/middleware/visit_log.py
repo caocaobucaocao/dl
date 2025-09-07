@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from gerenzhuye.decorators import logger
-from gerenzhuye.settings import TOKEN_NAME
+from gerenzhuye.settings import TOKEN_NAME, URL_PREFIX
 from ..models import SiteVisit
 
 
@@ -100,7 +100,12 @@ def record_visit(request):
     user_token = request.COOKIES.get(TOKEN_NAME)  # 对应前端设置的 cookie 键名
     visit_time = timezone.now()
     url = request.path
-    referrer = request.META.get('HTTP_REFERER', '') or None
+    # 处理referrer
+    referrer = request.META.get('HTTP_REFERER', '')
+    logger.debug(referrer)
+    referrer = referrer.replace(URL_PREFIX, '')
+    referrer = referrer.split('?')[0]
+    logger.debug(referrer)
     ip_address = get_real_ip(request)
     user_agent_str = request.META.get('HTTP_USER_AGENT', '') or None
 

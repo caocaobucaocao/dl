@@ -17,9 +17,13 @@
         </tr>
         {% for item in site_visits %}
             <tr>
-                <td>{{ item.referrer }}</td>
+                {% if  item.referrer %}
+                    <td>{{ item.referrer }}</td>
+                {% else %}
+                    <td>*******************</td>
+                {% endif %}
                 <td>{{ item.visit_time }}</td>
-                {% if item.username %}
+                {% if item.user.username %}
                     <td>
                         <a href="{% url 'data_analysis' %}?username={{ item.user.username }}">{{ item.user.username }}</a>
                     </td>

@@ -127,7 +127,7 @@ body {
    激活状态背景色 rgba(255, 255, 255, 0.1)
 */
 .nav-item:hover {
-    background-color: #2c3e50;
+    background-color: #64788e;
 }
 
 .nav-item.active {
@@ -152,7 +152,6 @@ body {
     flex-direction: column;
     justify-content: center;
     align-content: center;
-    min-height: 100vh;
 }
 
 .page-title {

@@ -11,6 +11,7 @@
         <div class="messages" id="messages"></div>
         <div class="send">
             <label id="userLabel" style="display:none">{{ request.user.username|default:"访客" }}</label>
+            <label for="text"></label>
             <input type="text" id="text"
                    onfocus="this.classList.add('focused')"
                    onblur="if(!this.value.trim()) this.classList.remove('focused')"

@@ -26,36 +26,9 @@ function getCsrfToken(): string | null {
 document.addEventListener('DOMContentLoaded', function () {
     // 获取所有导航项
     console.log('index DOMContentLoaded');
-    const startTime = new Date().getTime();
-
     const navItems: NodeListOf<HTMLDivElement> = document.querySelectorAll('.nav-item');
     // 获取当前页面的URL路径（例如：当前页面是https://xxx.com/home，则pathname是"/home"）
     const currentPath = window.location.pathname;
-    // window.addEventListener('beforeunload', function () {
-    //     const endTime = new Date().getTime();
-    //     const stayDuration = Math.floor((endTime - startTime) / 1000); // 秒
-    //     // 获取CSRF令牌
-    //     const csrfToken: string | null = getCsrfToken();
-    //     if (!csrfToken) {
-    //         console.error('未找到CSRF令牌，请求中断');
-    //         return;
-    //     }
-    //     console.log("csrfToken", csrfToken)
-    //     // 发送AJAX请求到后端记录时长
-    //     fetch("http://127.0.0.1:8000/zhuye/record_stay_duration/", {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'X-CSRFToken': csrfToken
-    //         },
-    //         body: JSON.stringify({
-    //             duration: stayDuration,
-    //             url: window.location.pathname
-    //         }),
-    //         keepalive: true
-    //     }).then(r => console.log(r)).catch(error => console.error('fetch错误:', error));
-    // });
-
     // 1. 页面加载时，根据当前URL自动激活对应的导航项
     function setActiveByUrl() {
         navItems.forEach(item => {

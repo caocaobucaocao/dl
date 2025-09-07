@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+from bokeh.models.tools import PanTool, BoxZoomTool, WheelZoomTool, ResetTool, HoverTool
 from django.contrib import staticfiles
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -151,7 +152,8 @@ UN_EMAIL = 'anonymous @ example.com'
 MEDIA_URL = '/media/'  # 媒体文件访问URL前缀
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 媒体文件存储目录（单独创建media文件夹）
 # tokenname
-TOKEN_NAME="csrftoken"
+TOKEN_NAME = "csrftoken"
+URL_PREFIX = 'http://127.0.0.1:8000/'
 # 确保日志目录存在
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_DIR):

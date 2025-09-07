@@ -131,12 +131,10 @@ class SiteVisit(models.Model):
     """网站访问数据模型，记录用户访问行为"""
 
     # 访问唯一标识
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-        help_text="访问记录唯一ID"
-    )
+    id = models.AutoField(primary_key=True,
+                          editable=False,
+                          help_text="访问记录唯一ID"
+                          )
     token = models.CharField(max_length=36, null=True, blank=True)  # 非登录用户标识（UUID）
     # 访问时间
     visit_time = models.DateTimeField(
@@ -169,13 +167,6 @@ class SiteVisit(models.Model):
         null=True,
         help_text="访问者浏览器及设备信息"
     )
-
-    # 访问时长（秒）
-    duration = models.PositiveIntegerField(
-        default=0,
-        help_text="用户在页面的停留时间（秒）,0代表,"
-    )
-
     # 设备类型
     DEVICE_CHOICES = [
         ('desktop', '桌面设备'),

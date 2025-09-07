@@ -1,10 +1,13 @@
 # chat/consumers.py
 import datetime
 import json
+import logging
 import os
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.conf import settings
+from twisted.python.log import logerr
+
 from zhuye.models import User
 from .models import Room, Chat
 from channels.db import sync_to_async
@@ -14,8 +17,9 @@ from gerenzhuye.settings import UN_LOGIN_NAME, UN_LOGIN_ID, UN_EMAIL
 # 1. 定义一个同步函数，一次性完成查询和数据提取
 def get_chat_by_room_name(name):
     # 同步环境中执行所有ORM操作
-    room = Room.objects.get(name=name)
-    chats = Chat.objects.filter(Room=room)
+    room, _ = Room.objects.get_or_create(name=name)
+    logging.debug(f"room {room}")
+    chats = Chat.objects.filter(room=room)
     # 提取需要的数据（转换为普通Python字典/列表，避免在异步中操作查询集）
     return [
         {
@@ -134,6 +138,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print(f"处理语音消息错误: {str(e)}")
 
     async def handle_json_data(self, text_data):
+        print(text_data)
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         # 关键改进：使用服务器端认证的用户名，而非客户端提交的
@@ -163,7 +168,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await create_chat(
             User=user_ins,
             message=message,
-            Room=room,
+            room=room,
             type=text_data_json['message_type'],
         )  # create()已隐含save()，无需重复调用
         # 发送消息到房间内所有用户
@@ -211,7 +216,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 创建语音消息记录
         msg = Chat.objects.create(
             User=user_ins,
-            Room=room,
+            room=room,
             message=os.path.join('voices', file_name),
             type='voice'
         )

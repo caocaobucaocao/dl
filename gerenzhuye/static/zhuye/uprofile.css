@@ -131,6 +131,20 @@ form ul.errorlist {
     width: 1rem;
     height: 1rem;
 }
+
+.btn {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
 .btn:hover {
     background-color: #34495e;
 }
@@ -160,8 +174,8 @@ form ul.errorlist {
 .current-avatar, .default-avatar {
     width: 4rem;
     height: 4rem;
-    border-radius: 50%;  /* 圆形头像 */
-    object-fit: cover;  /* 保持图片比例，裁剪多余部分 */
+    border-radius: 50%; /* 圆形头像 */
+    object-fit: cover; /* 保持图片比例，裁剪多余部分 */
     border: 2px solid #ddd;
 }
 

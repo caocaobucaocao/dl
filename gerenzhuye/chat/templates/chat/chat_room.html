@@ -10,7 +10,7 @@
         </div>
         <div class="messages" id="messages"></div>
         <div class="send">
-            <label id="userLabel" style="display:none">{{ request.user.username|default:"访客" }}</label>
+            <label id="userLabel" style="display:none">{{ request.user.username|default:"未命名" }}</label>
             <label for="text"></label>
             <input type="text" id="text"
                    onfocus="this.classList.add('focused')"
@@ -25,7 +25,7 @@
     {% if user.is_authenticated %}
         <input type="hidden" id="username" value="{{ request.user.username }}">
     {% else %}
-        <input type="hidden" id="username" value="unknow">
+        <input type="hidden" id="username" value="">
     {% endif %}
     <input type="hidden" id="roomName" value="{{ room_name }}">
 {% endblock %}

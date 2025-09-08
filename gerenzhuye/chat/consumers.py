@@ -6,7 +6,10 @@ import os
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.conf import settings
+from django.db.models.sql.query import get_order_dir
+from django.shortcuts import get_list_or_404
 from twisted.python.log import logerr
+from typing_extensions import get_original_bases
 
 from zhuye.models import User
 from .models import Room, Chat
@@ -145,34 +148,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if self.scope['user'].is_authenticated:
             username = self.scope['user'].username  # 从认证系统获取
         else:
-            username = UN_LOGIN_NAME  # 未登录用户的默认名
+            username = text_data_json['username']  # 未登录用户的默认名
         # 异步包装数据库操作
-        creat_room = sync_to_async(Room.objects.get_or_create, thread_sensitive=True)
-        room, _ = await creat_room(name=self.room_name)
-        create_chat = sync_to_async(Chat.objects.create, thread_sensitive=True)
+        get_or_create_room = sync_to_async(Room.objects.get_or_create, thread_sensitive=True)
+        room, _ = await get_or_create_room(name=self.room_name)
+        get_or_create_chat = sync_to_async(Chat.objects.create, thread_sensitive=True)
         # 获取或创建用户实例（关键修复）
         if self.scope['user'].is_authenticated:
             # 已登录用户直接使用
             user_ins = self.scope['user']
         else:
             get_or_create_user = sync_to_async(User.objects.get_or_create, thread_sensitive=True)
-            user_tuple = await get_or_create_user(
-                id=UN_LOGIN_ID,
-                defaults={
-                    'username': UN_LOGIN_NAME,
-                    'email': UN_EMAIL,
-                }
+            user_ins, _ = await get_or_create_user(
+                username=username
             )
-            # get_or_create返回元组：(实例, 是否新建)，我们只需要实例
-            user_ins = user_tuple[0]
-        await create_chat(
+        await get_or_create_chat(
             User=user_ins,
             message=message,
             room=room,
             type=text_data_json['message_type'],
         )  # create()已隐含save()，无需重复调用
         # 发送消息到房间内所有用户
-        await self.channel_layer.group_send(
+        await self.send_to_group_excluding_self(
             self.room_group_name,
             {'type': 'handle_message', 'username': username, 'message': message,
              'message_type': text_data_json['message_type']}
@@ -224,6 +221,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def handle_message(self, event):
         # 基础消息数据
+        # 检查消息是否是自己发送的：如果 sender_channel 等于当前连接的 channel_name，则不处理
+        if event.get('sender_channel') == self.channel_name:
+            return  # 自己发送的消息，直接忽略
         message_data = {
             'username': event['username'],
             'message': event['message']
@@ -235,3 +235,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # 发送消息
         await self.send(text_data=json.dumps(message_data))
+
+    async def send_to_group_excluding_self(self, group_name, message_data):
+        """向群组发送消息，但排除当前连接自身（兼容 InMemoryChannelLayer）"""
+        # 在消息中添加发送者的channel_name标识
+        message_with_sender = {
+            **message_data,
+            'sender_channel': self.channel_name  # 附加发送者标识
+        }
+        # 直接发送到群组（包括自己），后续在处理时过滤
+        await self.channel_layer.group_send(
+            group_name,
+            {
+                'type': 'handle_message',  # 仍然使用handle_message处理
+                **message_with_sender
+            }
+        )

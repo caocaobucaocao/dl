@@ -145,9 +145,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 AUTH_USER_MODEL = 'zhuye.User'  # 格式：应用名.模型类名
 LOGIN_URL = 'login'  # 未登录用户访问受保护页面时重定向的登录URL
 LOGIN_REDIRECT_URL = 'index'  # 登录后跳转的URL名称（对应你的视图name）
-UN_LOGIN_NAME = 'unknow'
-UN_LOGIN_ID = 1
-UN_EMAIL = 'anonymous @ example.com'
+
+
 # 媒体文件配置（用户上传的头像等动态资源）
 MEDIA_URL = '/media/'  # 媒体文件访问URL前缀
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 媒体文件存储目录（单独创建media文件夹）
@@ -256,3 +255,8 @@ LOGGING = {
         }
     }
 }
+UN_LOGIN_NAME = 'unknow'
+UN_LOGIN_ID = 1
+UN_EMAIL = 'anonymous @ example.com'
+
+

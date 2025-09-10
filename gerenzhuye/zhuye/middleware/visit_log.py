@@ -84,7 +84,7 @@ def record_visit(request):
     # 跳过不需要记录的请求
     # reverse('record_stay_duration')
     exclude_paths = [reverse('rgst'), reverse('login'), reverse('logout'), ]
-    for e in ['/admin/', '/static/', '/media/', ]:
+    for e in ['/admin/', '/static/', '/media/', '/ws/chat/']:
         exclude_paths.append(e)
     if any(request.path.startswith(path) for path in exclude_paths):
         return
@@ -102,10 +102,8 @@ def record_visit(request):
     url = request.path
     # 处理referrer
     referrer = request.META.get('HTTP_REFERER', '')
-    logger.debug(referrer)
     referrer = referrer.replace(URL_PREFIX, '')
     referrer = referrer.split('?')[0]
-    logger.debug(referrer)
     ip_address = get_real_ip(request)
     user_agent_str = request.META.get('HTTP_USER_AGENT', '') or None
 

@@ -16,7 +16,7 @@
                    onfocus="this.classList.add('focused')"
                    onblur="if(!this.value.trim()) this.classList.remove('focused')"
                    oninput="this.classList.toggle('has-content', this.value.trim() !== '')">
-            <button onclick="sendMsg()">发送</button>
+            <button id="sendButton">发送</button>
             <button class="record-button" id="holdRecord">
                 <i class="fa-solid fa-microphone-slash" id="microphone"></i>
             </button>
@@ -31,5 +31,5 @@
 {% endblock %}
 <!-- JavaScript 块定义 -->
 {% block js %}
-    <script src="{% static 'js/chat/room.js' %}"></script>
+    <script src="{% static 'js/chat/room.js' %}" type="module"></script>
 {% endblock %}
